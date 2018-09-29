@@ -96,7 +96,7 @@ public class XunDaoDCUploadRecordRequest implements Serializable {
         request.setEveryHalfHourDegress(list);
         request.setTotalAmmeterDegree(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 4))).divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP));
         cursor += 4;
-        request.setVin(BytesUtil.bcd2StrLittle(BytesUtil.copyBytes(msg, cursor, 17)));
+        request.setVin(BytesUtil.bcd2StrLittleContainA(BytesUtil.copyBytes(msg, cursor, 17)));
         cursor += 17;
         request.setUnUseAmount(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 4))).divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP));
         cursor += 4;

@@ -152,13 +152,17 @@ public class BytesUtil {
      * @输出结果: 10进制串
      */
     public static String bcd2Str(byte[] bytes) {
-        //        StringBuffer temp = new StringBuffer(bytes.length * 2);
-//
-//        for (int i = 0; i < bytes.length; i++) {
-//            temp.append((byte) ((bytes[i] & 0xf0) >>> 4));
-//            temp.append((byte) (bytes[i] & 0x0f));
-//        }
-//        return temp.toString();
+        StringBuffer temp = new StringBuffer(bytes.length * 2);
+
+        for (int i = 0; i < bytes.length; i++) {
+            temp.append((byte) ((bytes[i] & 0xf0) >>> 4));
+            temp.append((byte) (bytes[i] & 0x0f));
+        }
+        return temp.toString();
+
+    }
+    public static String bcd2StrContainA(byte[] bytes) {
+
         char temp[] = new char[bytes.length * 2], val;
 
         for (int i = 0; i < bytes.length; i++) {
@@ -181,8 +185,25 @@ public class BytesUtil {
         String temp = bcd2Str(bytes);
         for (int i = 0; i < temp.length(); i = i + 2) {
             strings.push(temp.substring(i, i + 2));
-
         }
+        StringBuilder stringBuilder = new StringBuilder();
+        while (!strings.isEmpty()) {
+            stringBuilder.append(strings.pop());
+        }
+        return stringBuilder.toString();
+    }
+    /**
+     * @函数功能: BCD码转为10进制串(阿拉伯数据) 小端模式
+     * @输入参数: BCD码
+     * @输出结果: 10进制串
+     */
+    public static String bcd2StrLittleContainA(byte[] bytes) {
+        Stack<String> strings = new Stack<>();
+        String temp = bcd2StrContainA(bytes);
+        for (int i = 0; i < temp.length(); i = i + 2) {
+            strings.push(temp.substring(i, i + 2));
+        }
+
         StringBuilder stringBuilder = new StringBuilder();
         while (!strings.isEmpty()) {
             stringBuilder.append(strings.pop());
