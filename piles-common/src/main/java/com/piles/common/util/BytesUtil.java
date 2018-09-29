@@ -152,13 +152,23 @@ public class BytesUtil {
      * @输出结果: 10进制串
      */
     public static String bcd2Str(byte[] bytes) {
-        StringBuffer temp = new StringBuffer(bytes.length * 2);
+        //        StringBuffer temp = new StringBuffer(bytes.length * 2);
+//
+//        for (int i = 0; i < bytes.length; i++) {
+//            temp.append((byte) ((bytes[i] & 0xf0) >>> 4));
+//            temp.append((byte) (bytes[i] & 0x0f));
+//        }
+//        return temp.toString();
+        char temp[] = new char[bytes.length * 2], val;
 
         for (int i = 0; i < bytes.length; i++) {
-            temp.append((byte) ((bytes[i] & 0xf0) >>> 4));
-            temp.append((byte) (bytes[i] & 0x0f));
+            val = (char) (((bytes[i] & 0xf0) >> 4) & 0x0f);
+            temp[i * 2] = (char) (val > 9 ? val + 'A' - 10 : val + '0');
+
+            val = (char) (bytes[i] & 0x0f);
+            temp[i * 2 + 1] = (char) (val > 9 ? val + 'A' - 10 : val + '0');
         }
-        return temp.toString();
+        return new String(temp);
     }
     /** */
     /**
