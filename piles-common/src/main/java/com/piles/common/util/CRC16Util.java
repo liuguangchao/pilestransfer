@@ -87,4 +87,25 @@ public class CRC16Util {
         return BytesUtil.intToBytesLittle(crc,2);
     }
 
+    /**
+     * 循道 求crc算法，是将数据内容转int累加 然后取模256，返回两位字节
+     *
+     * @param dataBytes
+     * @return
+     */
+    public static Byte getType3CRC(byte[] dataBytes) {
+        int crc = 0;//默认值
+        if (dataBytes == null) {
+            return null;
+        }
+        for (int i = 0; i < dataBytes.length; i++) {
+            byte dataByte = dataBytes[i];
+            int y = BytesUtil.bytesToIntLittle(new byte[]{dataByte});
+            crc += y;
+        }
+        byte[] temp = BytesUtil.intToBytesLittle(crc);
+
+        return temp[temp.length - 1];
+    }
+
 }

@@ -93,6 +93,22 @@ public class LoginRequest implements Serializable
         return request;
     }
 
+    /**
+     * 解析报文并封装request体
+     *
+     * @param msg
+     * @return
+     */
+    public static LoginRequest packEntityHongjiali(byte[] msg) {
+        //        起始域  长度 协议类型 连接类型   设备编号    站地址
+        //         1字节  1字节 1字节  1字节   8字节BCD码   2字节
+        LoginRequest request = new LoginRequest();
+        request.setPileNo(BytesUtil.ascii2Str(BytesUtil.copyBytes(msg, 12, 32)));
+
+
+        return request;
+    }
+
     @Override
     public String toString() {
         return "LoginRequest{" +

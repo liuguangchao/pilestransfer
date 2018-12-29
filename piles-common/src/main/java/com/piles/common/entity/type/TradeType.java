@@ -6,7 +6,8 @@ package com.piles.common.entity.type;
 public enum TradeType {
 
     WEI_JING(1, "蔚景"),
-    XUN_DAO(2, "循道");
+    XUN_DAO(2, "循道"),
+    HONG_JIALI(3, "鸿嘉利");
 
     private TradeType(int code, String value) {
         this.code = code;
