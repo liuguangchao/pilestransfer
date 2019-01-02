@@ -4,6 +4,7 @@ import com.piles.common.business.IBusiness;
 import com.piles.common.util.BytesUtil;
 import com.piles.common.util.ChannelResponseCallBackMap;
 import com.piles.control.entity.RemoteCloseRequest;
+import com.piles.control.entity.RemoteStartRequest;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,11 +20,11 @@ public class Type3StartBusinessImpl implements IBusiness {
     @Override
     public byte[] process(byte[] msg, Channel incoming) {
         log.info("接收到【type3】启动充电返回报文");
-        String order = String.valueOf(BytesUtil.xundaoControlByte2Int(BytesUtil.copyBytes(msg, 2, 4)));
+        String order = String.valueOf(BytesUtil.type3ControlByte2Int(BytesUtil.copyBytes(msg, 5, 1)));
         //依照报文体规则解析报文
-        RemoteCloseRequest remoteCloseRequest = RemoteCloseRequest.packEntityXunDao(msg);
-        log.info("接收到【type3】充电命令" + remoteCloseRequest.toString());
-        ChannelResponseCallBackMap.callBack(incoming, order, remoteCloseRequest);
+        RemoteStartRequest remoteStartRequest = RemoteStartRequest.type3PackEntity(msg);
+        log.info("接收到【type3】充电命令" + remoteStartRequest.toString());
+        ChannelResponseCallBackMap.callBack(incoming, order, remoteStartRequest);
         return null;
     }
 }

@@ -439,6 +439,17 @@ public class BytesUtil {
         return bytesToInt(copyBytes(control, 0, 2), 0);
     }
 
+    /**
+     * 根据整体控制域获得对应int值
+     *
+     * @return
+     */
+    public static int type3ControlByte2Int(byte[] control) {
+
+
+        return bytesToInt(control, 0);
+    }
+
     public static String ascii2StrLittle(byte[] ascs) {
         byte[] data = revert(ascs);
         String asciiStr = null;

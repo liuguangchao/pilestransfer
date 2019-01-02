@@ -32,21 +32,19 @@ public class Type3LockSyncBusinessImpl implements IBusiness {
         byte[] data = Bytes.concat(BytesUtil.intToBytesLittle(ms), BytesUtil.intToBytesLittle(min, 1), BytesUtil.intToBytesLittle(hour, 1),
                 BytesUtil.intToBytesLittle(day, 1), BytesUtil.intToBytesLittle(month, 1), BytesUtil.intToBytesLittle(year, 1));
 
-        byte[] head = new byte[]{0x68};
-        byte[] length = BytesUtil.intToBytesLittle(20, 1);
-        byte[] contrl = BytesUtil.copyBytes(msg, 2, 4);
+        byte[] head = BytesUtil.copyBytes(msg, 0, 6);
+        byte[] cmd = BytesUtil.intToBytesLittle(3);
+        byte[] type = BytesUtil.intToBytesLittle(1, 1);
+        byte[] offset = BytesUtil.intToBytesLittle(2, 4);
+        byte[] offsetLen = BytesUtil.intToBytesLittle(8, 2);
+        byte[] dataTemp = Bytes.concat(type, offset, offsetLen);
 
-        byte[] type = BytesUtil.intToBytesLittle(XunDaoTypeCode.LOCK_SYNC_CODE.getCode(), 1);
-        byte[] beiyong = new byte[]{0x00};
-        byte[] reason = BytesUtil.copyBytes(msg, 8, 2);
-        byte[] crc = CRC16Util.getXunDaoCRC(data);
-        byte[] addr = new byte[]{0x00, 0x00, 0x00};
+        byte[] crc = new byte[]{CRC16Util.getType3CRC(Bytes.concat(cmd, dataTemp))};
+        int length = head.length + cmd.length + dataTemp.length + crc.length;
+        byte[] lengths = BytesUtil.intToBytes(length);
+        head[2] = lengths[0];
+        head[3] = lengths[1];
+        return Bytes.concat(head, cmd, dataTemp, crc);
 
-
-        byte[] temp = Bytes.concat(head, length, contrl, type, beiyong, reason, crc, addr, data);
-
-        //组装返回报文体
-
-        return temp;
     }
 }

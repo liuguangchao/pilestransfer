@@ -52,6 +52,24 @@ public class RemoteCloseRequest extends BasePushResponse implements Serializable
         return request;
     }
 
+    /**
+     * 解析报文并封装request体
+     *
+     * @param msg
+     * @return
+     */
+    public static RemoteCloseRequest type3PackEntity(byte[] msg) {
+        RemoteCloseRequest request = new RemoteCloseRequest();
+        byte[] serials = BytesUtil.copyBytes(msg, 12, 32);
+        int i = 0;
+        while (serials[i] != 0x00) {
+            i++;
+        }
+        request.setOrderNo(Long.valueOf(BytesUtil.ascii2Str(BytesUtil.copyBytes(serials, 0, i))));
+        request.setResult(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, 54, 1)));
+        return request;
+    }
+
     public static void main(String[] args) {
         byte[] msg= new byte[]{ 0x68,0x15,0x4,(byte)0xd4,0x4,(byte)0xd4,(byte)0x82,0x0,0x3,0x0,(byte)0x88,0x0,0x1c,0x0,0x6,0x0,(byte)0x80,0x0,0x0,0x0,0x0,0x1,0x1};
 //        packEntity(msg);

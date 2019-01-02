@@ -31,7 +31,6 @@ public class Type3BusinessFactory implements IBusinessFactory {
             //心跳
             case 102:
                 return SpringContextUtil.getBean("type3ChainTestBusiness");
-            //信息状态上报 TODO
             case 104:
                 return SpringContextUtil.getBean("type3UploadChargeMonitorBusiness");
             //充电
@@ -40,9 +39,9 @@ public class Type3BusinessFactory implements IBusinessFactory {
             //停止充电
             case 6:
                 return SpringContextUtil.getBean("type3StopBusiness");
-            //上传充电记录
+            //上传充电记录 TODO
             case 202:
-                return SpringContextUtil.getBean("type3UnploadTradeDataBusiness");
+                return SpringContextUtil.getBean("type3UploadRecordBusiness");
             //设置电价
             case 1104:
                 return SpringContextUtil.getBean("type3SetChargePlotBusiness");

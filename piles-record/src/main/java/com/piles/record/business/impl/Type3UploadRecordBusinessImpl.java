@@ -22,7 +22,7 @@ import javax.annotation.Resource;
  * 上传充电记录接口实现
  */
 @Slf4j
-@Service("type3UnploadTradeDataBusiness")
+@Service("type3UploadRecordBusiness")
 public class Type3UploadRecordBusinessImpl implements IBusiness {
 
     @Resource
