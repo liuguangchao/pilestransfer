@@ -39,32 +39,13 @@ public class Type3BusinessFactory implements IBusinessFactory {
             //停止充电
             case 6:
                 return SpringContextUtil.getBean("type3StopBusiness");
-            //上传充电记录 TODO
+            //上传充电记录
             case 202:
                 return SpringContextUtil.getBean("type3UploadRecordBusiness");
             //设置电价
             case 1104:
                 return SpringContextUtil.getBean("type3SetChargePlotBusiness");
 
-
-//            //时钟同步
-//            case 102:
-//                return SpringContextUtil.getBean("xunDaoLockSyncBusiness");
-//            //时钟同步
-//            case 6:
-//                return SpringContextUtil.getBean("xunDaoLockSyncBusiness");
-//            //时钟同步
-//            case 4:
-//                return SpringContextUtil.getBean("xunDaoLockSyncBusiness");
-//            //时钟同步
-//            case 4:
-//                return SpringContextUtil.getBean("xunDaoLockSyncBusiness");
-//            //时钟同步
-//            case 4:
-//                return SpringContextUtil.getBean("xunDaoLockSyncBusiness");
-//            //时钟同步
-//            case 4:
-//                return SpringContextUtil.getBean("xunDaoLockSyncBusiness");
 
             default:
                 log.error("接收到报文{}，未匹配到合适的命令码：{}", msg, typeCode);

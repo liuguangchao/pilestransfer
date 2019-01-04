@@ -29,8 +29,9 @@ public class XunDaoLockSyncBusinessImpl implements IBusiness {
         int day = dateTime.getDayOfMonth();
         int month = dateTime.getMonthOfYear();
         int year = dateTime.getYear() - 2000;
-        byte[] data = Bytes.concat(BytesUtil.intToBytesLittle(ms), BytesUtil.intToBytesLittle(min, 1), BytesUtil.intToBytesLittle(hour, 1),
-                BytesUtil.intToBytesLittle(day, 1), BytesUtil.intToBytesLittle(month, 1), BytesUtil.intToBytesLittle(year, 1));
+        byte[] data = Bytes.concat(BytesUtil.intToBytes(20, 1), BytesUtil.intToBytes(year, 1), BytesUtil.intToBytes(month, 1),
+                BytesUtil.intToBytes(day, 1), BytesUtil.intToBytes(hour, 1),
+                BytesUtil.intToBytes(min, 1), BytesUtil.intToBytes(ms, 1), new byte[]{(byte) 0xff});
 
         byte[] head = new byte[]{0x68};
         byte[] length = BytesUtil.intToBytesLittle(20, 1);

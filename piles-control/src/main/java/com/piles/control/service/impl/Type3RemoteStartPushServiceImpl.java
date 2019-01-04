@@ -27,7 +27,7 @@ public class Type3RemoteStartPushServiceImpl implements IRemoteStartPushService 
 
     @Override
     public BasePushCallBackResponse<RemoteStartRequest> doPush(RemoteStartPushRequest remoteStartPushRequest) {
-        byte[] pushMsg = RemoteStartPushRequest.packBytesXunDao(remoteStartPushRequest);
+        byte[] pushMsg = RemoteStartPushRequest.packBytesType3(remoteStartPushRequest);
         BasePushCallBackResponse<RemoteStartRequest> basePushCallBackResponse = new BasePushCallBackResponse();
         basePushCallBackResponse.setSerial(remoteStartPushRequest.getSerial());
         boolean flag = pushBusiness.push(pushMsg, remoteStartPushRequest.getTradeTypeCode(), remoteStartPushRequest.getPileNo(), basePushCallBackResponse, ECommandCode.REMOTE_CHARGE_CODE);

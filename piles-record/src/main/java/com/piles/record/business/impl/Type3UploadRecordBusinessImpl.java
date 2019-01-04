@@ -10,6 +10,8 @@ import com.piles.common.util.CRC16Util;
 import com.piles.common.util.ChannelMapByEntity;
 import com.piles.common.util.MsgHelper;
 import com.piles.record.domain.UploadRecord;
+import com.piles.record.entity.Type3UploadChargeMonitorRequest;
+import com.piles.record.entity.Type3UploadRecordRequest;
 import com.piles.record.entity.XunDaoUploadRecordRequest;
 import com.piles.record.service.IUploadRecordService;
 import io.netty.channel.Channel;
@@ -35,10 +37,10 @@ public class Type3UploadRecordBusinessImpl implements IBusiness {
     @Override
     public byte[] process(byte[] msg, Channel incoming) {
         log.info("接收到【type3】充电桩上传充电记录报文");
-        int gunNo = MsgHelper.getGunNo(msg);
+        int gunNo = MsgHelper.getType3GunNo(msg);
         //依照报文体规则解析报文
-        byte[] dataBytes = BytesUtil.copyBytes(msg, 13, (msg.length - 13));
-        XunDaoUploadRecordRequest uploadRecordRequest = XunDaoUploadRecordRequest.packEntity(dataBytes);
+        byte[] dataBytes = BytesUtil.copyBytes(msg, 12, (msg.length - 12));
+        Type3UploadRecordRequest uploadRecordRequest = Type3UploadRecordRequest.packEntity(dataBytes);
         log.info("接收到【type3】充电桩上传充电记录报文:{}", uploadRecordRequest.toString());
         UploadRecord uploadRecord = buildServiceEntity(uploadRecordRequest, gunNo);
         //添加serial
@@ -68,9 +70,9 @@ public class Type3UploadRecordBusinessImpl implements IBusiness {
 
     }
 
-    private UploadRecord buildServiceEntity(XunDaoUploadRecordRequest uploadRecordRequest, int gunNo) {
+    private UploadRecord buildServiceEntity(Type3UploadRecordRequest uploadRecordRequest, int gunNo) {
         UploadRecord uploadRecord = new UploadRecord();
-        uploadRecord.setTradeTypeCode(TradeType.XUN_DAO.getCode());
+        uploadRecord.setTradeTypeCode(TradeType.HONG_JIALI.getCode());
         uploadRecord.setOrderNo(uploadRecordRequest.getOrderNo());
         uploadRecord.setPileNo(uploadRecordRequest.getPileNo());
         uploadRecord.setEndReason(uploadRecordRequest.getStopChargeReason());

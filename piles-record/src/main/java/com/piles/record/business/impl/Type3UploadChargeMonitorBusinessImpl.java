@@ -9,6 +9,7 @@ import com.piles.common.entity.type.TradeType;
 import com.piles.common.util.*;
 import com.piles.record.domain.UploadChargeMonitor;
 import com.piles.record.domain.UploadRecord;
+import com.piles.record.entity.Type3UploadChargeMonitorRequest;
 import com.piles.record.entity.XunDaoUploadChargeMonitorRequest;
 import com.piles.record.service.IUploadChargeMonitorService;
 import com.piles.record.service.IUploadRecordService;
@@ -36,20 +37,14 @@ public class Type3UploadChargeMonitorBusinessImpl implements IBusiness {
     @Override
     public byte[] process(byte[] msg, Channel incoming) {
         log.info("接收到【type3】充电桩上传充电过程监测数据报文");
-        byte[] dataBytes = BytesUtil.copyBytes(msg, 13, (msg.length - 13));
+        byte[] dataBytes = BytesUtil.copyBytes(msg, 12, (msg.length - 12));
 
         //依照报文体规则解析报文
-        //TODO 解析成type3
-        XunDaoUploadChargeMonitorRequest uploadChargeMonitorRequest = XunDaoUploadChargeMonitorRequest.packEntity(dataBytes);
+        Type3UploadChargeMonitorRequest uploadChargeMonitorRequest = Type3UploadChargeMonitorRequest.packEntity(dataBytes);
         log.info("接收到【type3】充电桩上传充电过程监测数据报文:{}", uploadChargeMonitorRequest.toString());
-        ChannelEntity channel = ChannelMapByEntity.getChannel(incoming);
 
-//        int switchStatus = uploadChargeMonitorRequest.getSwitchStatus();
-//        BigDecimal highestAllowElectricity = uploadChargeMonitorRequest.getHighestAllowElectricity();
-//        String workStatus = uploadChargeMonitorRequest.getWorkStatus();
-//        GunStatusMapUtil.put(uploadChargeMonitorRequest.getPileNo(), TradeType.XUN_DAO, uploadChargeMonitorRequest.getGunNo(), switchStatus);
-//        GunElecAmountMapUtil.put(uploadChargeMonitorRequest.getPileNo(), TradeType.XUN_DAO, highestAllowElectricity);
-//        GunWorkStatusMapUtil.put(uploadChargeMonitorRequest.getPileNo(), TradeType.XUN_DAO, workStatus);
+        int workStatus = uploadChargeMonitorRequest.getWorkStatus();
+        GunStatusMapUtil.put(uploadChargeMonitorRequest.getPileNo(), TradeType.HONG_JIALI, uploadChargeMonitorRequest.getGunNo(), workStatus);
 
         UploadChargeMonitor uploadChargeMonitor = buildServiceEntity(uploadChargeMonitorRequest);
         //调用底层接口
@@ -59,9 +54,9 @@ public class Type3UploadChargeMonitorBusinessImpl implements IBusiness {
         return packageInfo(msg);
     }
 
-    private UploadChargeMonitor buildServiceEntity(XunDaoUploadChargeMonitorRequest uploadChargeMonitorRequest) {
+    private UploadChargeMonitor buildServiceEntity(Type3UploadChargeMonitorRequest uploadChargeMonitorRequest) {
         UploadChargeMonitor updateStatusReport = new UploadChargeMonitor();
-        updateStatusReport.setTradeTypeCode(TradeType.XUN_DAO.getCode());
+        updateStatusReport.setTradeTypeCode(TradeType.HONG_JIALI.getCode());
         updateStatusReport.setPileNo(uploadChargeMonitorRequest.getPileNo());
         return updateStatusReport;
     }
@@ -72,7 +67,7 @@ public class Type3UploadChargeMonitorBusinessImpl implements IBusiness {
 
         byte[] head = BytesUtil.copyBytes(msg, 0, 6);
         byte[] cmd = BytesUtil.intToBytesLittle(103);
-        byte[] type = BytesUtil.intToBytesLittle(1, 1);
+//        byte[] type = BytesUtil.intToBytesLittle(1, 1);
         byte[] dataTemp = BytesUtil.copyBytes(msg, 8, 5);
 
         byte[] crc = new byte[]{CRC16Util.getType3CRC(Bytes.concat(cmd, dataTemp))};

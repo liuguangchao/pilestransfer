@@ -33,7 +33,7 @@ public class Type3RemoteStopPushServiceImpl implements IRemoteClosePushService {
 
     @Override
     public BasePushCallBackResponse<RemoteCloseRequest> doPush(RemoteClosePushRequest remoteClosePushRequest) {
-        byte[] pushMsg = RemoteClosePushRequest.packBytesXundao(remoteClosePushRequest);
+        byte[] pushMsg = RemoteClosePushRequest.packBytesType3(remoteClosePushRequest);
         BasePushCallBackResponse<RemoteCloseRequest> basePushCallBackResponse = new BasePushCallBackResponse();
         basePushCallBackResponse.setSerial(remoteClosePushRequest.getSerial());
         boolean flag = pushBusiness.push(pushMsg, remoteClosePushRequest.getTradeTypeCode(), remoteClosePushRequest.getPileNo(), basePushCallBackResponse, ECommandCode.REMOTE_CHARGE_CODE);
