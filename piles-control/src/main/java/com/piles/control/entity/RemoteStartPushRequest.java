@@ -138,7 +138,6 @@ public class RemoteStartPushRequest extends BasePushRequest implements Serializa
      * @return
      */
     public static byte[] packBytesType3(RemoteStartPushRequest request) {
-        //TODO
         int model = request.getChargeModel();
 
         BigDecimal chargeData = request.getChargeData();
@@ -152,53 +151,39 @@ public class RemoteStartPushRequest extends BasePushRequest implements Serializa
             case 2:
                 //定费
                 dataint = chargeData.multiply(new BigDecimal(100)).intValue();
-                model = 1;
+                model = 2;
                 break;
             case 4:
                 //定量
                 dataint = chargeData.multiply(new BigDecimal(100)).intValue();
-                model = 2;
+                model = 3;
                 break;
 
             case 3:
                 //定时
                 dataint = chargeData.divide(new BigDecimal(60), 0).intValue();
-                model = 3;
+                model = 1;
                 break;
         }
-        byte[] data = Bytes.concat(BytesUtil.str2BcdLittle(request.getPileNo()), new byte[]{0x01}, BytesUtil.intToBytes(model, 1), BytesUtil.intToBytesLittle(dataint, 4));
-        byte[] serial = BytesUtil.rightPadBytes(String.valueOf(request.getSerial()).getBytes(), 16, (byte) 0x00);
         byte[] orderNo = BytesUtil.rightPadBytes(String.valueOf(request.getOrderNo()).getBytes(), 32, (byte) 0x00);
-        data = Bytes.concat(data, serial, orderNo);
-        byte[] head = new byte[]{0x68};
-        byte[] length = new byte[]{0x49};
-        byte[] contrl = BytesUtil.xundaoControlInt2Byte(Integer.parseInt(request.getSerial()));
-        byte[] type = new byte[]{(byte) 0x85};
+        byte[] data = Bytes.concat(new byte[]{0x00, 0x00, 0x00, 0x00}, BytesUtil.intToBytes(request.getGunNo(), 1), new byte[]{0x00, 0x00, 0x00, 0x00},
+                BytesUtil.intToBytes(Integer.parseInt(request.getChargeStopCode()), 4),
+                BytesUtil.intToBytes(model, 1), BytesUtil.intToBytesLittle(dataint, 4), new byte[]{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
+                orderNo, new byte[]{0x01, 0x00, 0x00, 0x00, 0x00}, orderNo
+        );
+        byte[] serial = BytesUtil.intToBytes(Integer.parseInt(request.getSerial()), 1);
 
-        byte[] beiyong = BytesUtil.intToBytesLittle(request.getGunNo(), 1);
-//        byte[] beiyong = 1 == request.getGunNo() ? new byte[]{0x00} : new byte[]{0x01};
-        byte[] reason = ChannelMapByEntity.getPileTypeArr(request.getPileNo());
-        byte[] crc = CRC16Util.getXunDaoCRC(data);
-        byte[] addr = new byte[]{0x1C};
+        byte[] head = new byte[]{(byte) 0xAA, (byte) 0xF5, 0x00, 0x00, 0x10};
+        head = Bytes.concat(head, serial);
+        byte[] cmd = BytesUtil.intToBytesLittle(7);
 
 
-        byte[] temp = Bytes.concat(head, length, contrl, type, beiyong, reason, crc, addr, data);
-
+        byte[] crc = new byte[]{CRC16Util.getType3CRC(Bytes.concat(cmd, data))};
+        int length = head.length + cmd.length + data.length + crc.length;
+        byte[] lengths = BytesUtil.intToBytes(length);
+        head[2] = lengths[0];
+        head[3] = lengths[1];
+        return Bytes.concat(head, cmd, data, crc);
         //组装返回报文体
-
-        return temp;
     }
-
-    public static void main(String[] args) {
-        RemoteStartPushRequest request = new RemoteStartPushRequest();
-        request.setGunNo(1);
-        request.setChargeModel(4);
-        request.setChargeData(new BigDecimal(0.1));
-        request.setChargeStopCode("4");
-        request.setOrderNo(1223123L);
-        RemoteStartPushRequest.packBytes(request);
-    }
-
-
-
 }

@@ -3,10 +3,12 @@ package com.piles.setting.entity;
 import com.google.common.primitives.Bytes;
 import com.piles.common.entity.BasePushRequest;
 import com.piles.common.util.BytesUtil;
+import com.piles.common.util.CRC16Util;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -31,13 +33,18 @@ public class Type3SetChargeFeePushRequest extends BasePushRequest implements Ser
     private List<FeeInfo> feeInfoList;
 
     @Data
-    class FeeInfo {
+    class FeeInfo implements Comparable<FeeInfo> {
         private int index;//第几个
         private int startHour;//开始小时
         private int endHour;//结束小时
         private int startMin;//开始分钟
         private int endMin;//结束分钟
         private BigDecimal fee;//电价
+
+        @Override
+        public int compareTo(FeeInfo o) {
+            return this.index - o.index;
+        }
     }
 
     /**
@@ -47,10 +54,29 @@ public class Type3SetChargeFeePushRequest extends BasePushRequest implements Ser
      * @return
      */
     public static byte[] packBytes(Type3SetChargeFeePushRequest request) {
-        //TODO 设置推送信息
-        byte[] result = new byte[0];
-        result = Bytes.concat(result, BytesUtil.str2BcdLittle(request.getPileNo()));
-        return result;
+        Collections.sort(request.getFeeInfoList());
+        byte[] data = new byte[96];
+        for (FeeInfo feeInfo : request.getFeeInfoList()) {
+            byte[] startHour = BytesUtil.intToBytes(feeInfo.getStartHour(), 1);
+            byte[] startMin = BytesUtil.intToBytes(feeInfo.getStartMin(), 1);
+            byte[] endHour = BytesUtil.intToBytes(feeInfo.getEndHour(), 1);
+            byte[] endMin = BytesUtil.intToBytes(feeInfo.getEndMin(), 1);
+            byte[] dataint = BytesUtil.intToBytes(feeInfo.getFee().multiply(new BigDecimal(100)).intValue(), 4);
+            data = Bytes.concat(data, startHour, startMin, endHour, endMin, dataint);
+        }
+        byte[] serial = BytesUtil.intToBytes(Integer.parseInt(request.getSerial()), 1);
+
+        byte[] head = new byte[]{(byte) 0xAA, (byte) 0xF5, 0x00, 0x00, 0x10};
+        head = Bytes.concat(head, serial);
+        byte[] cmd = BytesUtil.intToBytesLittle(1103);
+
+
+        byte[] crc = new byte[]{CRC16Util.getType3CRC(Bytes.concat(cmd, data))};
+        int length = head.length + cmd.length + data.length + crc.length;
+        byte[] lengths = BytesUtil.intToBytes(length);
+        head[2] = lengths[0];
+        head[3] = lengths[1];
+        return Bytes.concat(head, cmd, data, crc);
     }
 
 
