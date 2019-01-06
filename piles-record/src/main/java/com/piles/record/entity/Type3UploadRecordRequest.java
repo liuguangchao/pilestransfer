@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.piles.common.entity.type.TradeType;
 import com.piles.common.util.BytesUtil;
 import lombok.Data;
+import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -72,7 +73,8 @@ public class Type3UploadRecordRequest implements Serializable {
         while (msg[cursor + j] != 0x00 && j < 32) {
             j++;
         }
-        request.setCardNo(Long.valueOf(BytesUtil.ascii2Str(BytesUtil.copyBytes(msg, cursor, j))));
+        String cardNo = BytesUtil.ascii2Str(BytesUtil.copyBytes(msg, cursor, j));
+        request.setCardNo(StringUtils.isEmpty(cardNo) ? 0L : Long.valueOf(cardNo));
         cursor += 32;
         j = 0;
 
