@@ -44,7 +44,7 @@ public class Type3UploadChargeMonitorBusinessImpl implements IBusiness {
         log.info("接收到【type3】充电桩上传充电过程监测数据报文:{}", uploadChargeMonitorRequest.toString());
 
         int workStatus = uploadChargeMonitorRequest.getWorkStatus();
-        GunStatusMapUtil.put(uploadChargeMonitorRequest.getPileNo(), TradeType.HONG_JIALI, uploadChargeMonitorRequest.getGunNo(), workStatus);
+        GunStatusMapUtil.put(uploadChargeMonitorRequest.getPileNo(), TradeType.HONG_JIALI, uploadChargeMonitorRequest.getGunNo() - 1, workStatus);
 
         UploadChargeMonitor uploadChargeMonitor = buildServiceEntity(uploadChargeMonitorRequest);
         //调用底层接口

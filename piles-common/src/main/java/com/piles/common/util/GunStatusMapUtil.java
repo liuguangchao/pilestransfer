@@ -15,7 +15,7 @@ public class GunStatusMapUtil {
     public static void put(String pileNo, TradeType tradeType,int gunNo,int status){
         String key=pileNo+"_"+tradeType.getCode();
         //循道的需要拼上枪号
-        if(TradeType.XUN_DAO.equals(tradeType)){
+        if (TradeType.XUN_DAO.equals(tradeType) || TradeType.HONG_JIALI.equals(tradeType)) {
             key = key+"_"+gunNo;
         }
         if (map.containsKey( key )){
@@ -32,7 +32,7 @@ public class GunStatusMapUtil {
 
         String key=pileNo+"_"+tradeType;
         //循道要加上枪号
-        if(TradeType.XUN_DAO.getCode() == tradeType){
+        if (TradeType.XUN_DAO.getCode() == tradeType || TradeType.HONG_JIALI.getCode() == tradeType) {
             key = key+"_"+gunNo;
         }
         return map.get( key );

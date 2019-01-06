@@ -94,6 +94,7 @@ public class FunctionController {
     @RequestMapping(value = "/pileStatus", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> status(PileStatusRequest pileStatusRequest) {
+
         log.info("查询枪状态是否可用信息:" + JSON.toJSONString(pileStatusRequest));
         Map<String, Object> map = new HashedMap();
         map = checkParams(pileStatusRequest.getTradeTypeCode(), pileStatusRequest.getPileNo());
@@ -178,6 +179,12 @@ public class FunctionController {
     @RequestMapping(value = "/pileChargeStatus", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> chargeStatus(PileChargeStatusRequest pileChargeStatusRequest) {
+        if (pileChargeStatusRequest.getTradeTypeCode() == TradeType.HONG_JIALI.getCode()) {
+            Random random = new Random();
+            int i = random.nextInt(255);
+            pileChargeStatusRequest.setSerial(String.valueOf(i));
+            pileChargeStatusRequest.setGunNo(pileChargeStatusRequest.getGunNo() + 1);
+        }
         if (pileChargeStatusRequest.getTradeTypeCode() == TradeType.HONG_JIALI.getCode()) {
             Random random = new Random();
             int i = random.nextInt(255);
