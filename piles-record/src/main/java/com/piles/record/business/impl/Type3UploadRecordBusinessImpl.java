@@ -75,7 +75,7 @@ public class Type3UploadRecordBusinessImpl implements IBusiness {
     private UploadRecord buildServiceEntity(Type3UploadRecordRequest uploadRecordRequest, int gunNo) {
         UploadRecord uploadRecord = new UploadRecord();
         uploadRecord.setTradeTypeCode(TradeType.HONG_JIALI.getCode());
-        uploadRecord.setOrderNo(uploadRecordRequest.getOrderNo());
+        uploadRecord.setOrderNo(uploadRecordRequest.getSerial());
         uploadRecord.setPileNo(uploadRecordRequest.getPileNo());
         uploadRecord.setEndReason(uploadRecordRequest.getStopChargeReason());
         uploadRecord.setTotalAmmeterDegree(uploadRecordRequest.getTotalAmmeterDegree());
