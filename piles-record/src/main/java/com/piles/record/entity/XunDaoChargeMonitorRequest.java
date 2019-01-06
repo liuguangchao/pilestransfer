@@ -129,7 +129,7 @@ public class XunDaoChargeMonitorRequest extends BasePushResponse implements Seri
         XunDaoChargeMonitorRequest request = new XunDaoChargeMonitorRequest();
 
         int cursor = 0;
-        request.setGunNo(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 1)));
+        request.setGunNo(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 1)) - 1);
         cursor++;
         request.setWorkStatus(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 1)) + "");
         cursor++;

@@ -74,7 +74,7 @@ public class Type3UploadChargeMonitorRequest implements Serializable {
         cursor += 32;
         request.setGunNums(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 1)));
         cursor += 1;
-        request.setGunNo(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 1)));
+        request.setGunNo(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 1)) - 1);
         cursor += 1;
         request.setGunType(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 1)));
         cursor += 1;

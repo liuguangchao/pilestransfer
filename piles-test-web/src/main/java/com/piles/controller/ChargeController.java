@@ -52,6 +52,7 @@ public class ChargeController {
             Random random = new Random();
             int i = random.nextInt(255);
             remoteStartRequest.setSerial(String.valueOf(i));
+            remoteStartRequest.setGunNo(remoteStartRequest.getGunNo() + 1);
         }
         Map<String, Object> map = new HashedMap();
         try {
@@ -261,6 +262,7 @@ public class ChargeController {
             Random random = new Random();
             int i = random.nextInt(255);
             chargeRemoteStopRequest.setSerial(String.valueOf(i));
+            chargeRemoteStopRequest.setGunNo(chargeRemoteStopRequest.getGunNo() + 1);
         }
         log.info("请求停止充电请求信息:" + JSON.toJSONString(chargeRemoteStopRequest));
         RemoteClosePushRequest remoteClosePushRequest = new RemoteClosePushRequest();

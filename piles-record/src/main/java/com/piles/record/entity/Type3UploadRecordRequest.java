@@ -67,7 +67,7 @@ public class Type3UploadRecordRequest implements Serializable {
         cursor += 32;
         request.setGunType(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 1)));
         cursor += 1;
-        request.setGunNo(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 1)));
+        request.setGunNo(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 1)) - 1);
         cursor += 1;
         j = 0;
         while (msg[cursor + j] != 0x00 && j < 32) {
