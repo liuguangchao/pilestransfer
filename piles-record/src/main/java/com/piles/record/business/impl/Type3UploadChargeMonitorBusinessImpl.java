@@ -42,7 +42,11 @@ public class Type3UploadChargeMonitorBusinessImpl implements IBusiness {
         //依照报文体规则解析报文
         Type3UploadChargeMonitorRequest uploadChargeMonitorRequest = Type3UploadChargeMonitorRequest.packEntity(dataBytes);
         log.info("接收到【type3】充电桩上传充电过程监测数据报文:{}", uploadChargeMonitorRequest.toString());
-
+        ChannelEntity channelEntity = new ChannelEntity(uploadChargeMonitorRequest.getPileNo().trim(), TradeType.fromCode(TradeType.HONG_JIALI.getCode()));
+        if (null == ChannelMapByEntity.getChannel(channelEntity) || null == ChannelMapByEntity.getChannel(TradeType.HONG_JIALI.getCode(), uploadChargeMonitorRequest.getPileNo().trim())) {
+            ChannelMapByEntity.addChannel(channelEntity, incoming);
+            ChannelMapByEntity.addChannel(incoming, channelEntity);
+        }
         int workStatus = uploadChargeMonitorRequest.getWorkStatus();
         GunStatusMapUtil.put(uploadChargeMonitorRequest.getPileNo(), TradeType.HONG_JIALI, uploadChargeMonitorRequest.getGunNo(), workStatus);
 
