@@ -55,6 +55,8 @@ public class XunDaoChargeMonitorRequest extends BasePushResponse implements Seri
     private String serial;
     //订单号 ascii 32位小端
     private String orderNo;
+    private int soc;
+    private int needTime;//分钟
 
 
 
@@ -125,14 +127,19 @@ public class XunDaoChargeMonitorRequest extends BasePushResponse implements Seri
      * @param msg
      * @return
      */
-    public static XunDaoChargeMonitorRequest packEntityType3(byte[] msg) {
+    public static XunDaoChargeMonitorRequest packEntityType3(Type3UploadChargeMonitorRequest msg) {
         XunDaoChargeMonitorRequest request = new XunDaoChargeMonitorRequest();
-
-        int cursor = 0;
-        request.setGunNo(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 1)) - 1);
-        cursor++;
-        request.setWorkStatus(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 1)) + "");
-        cursor++;
+        request.setWorkStatus(msg.getWorkStatus() + "");
+        request.setGunNo(msg.getGunNo());
+        request.setPileNo(msg.getPileNo());
+        request.setActivElectricalDegree(msg.getChargeQuantity());
+        request.setChargeDuration(0 == msg.getChargeTime() ? 0 : msg.getChargeTime() / 60);
+        request.setCurrentChargeQuantity(msg.getChargeQuantity());
+        request.setHighestAllowElectricity(msg.getHighestAllowElectricity());
+        request.setHighestAllowVoltage(msg.getHighestAllowVoltage());
+        request.setOrderNo(msg.getCardNo());
+        request.setSoc(msg.getSoc());
+        request.setNeedTime(0 == msg.getNeedTime() ? 0 : msg.getNeedTime() / 60);
 
         return request;
     }
