@@ -57,6 +57,12 @@ public class XunDaoChargeMonitorRequest extends BasePushResponse implements Seri
     private String orderNo;
     private int soc;
     private int needTime;//分钟
+    //充电输出电压(直 流最大输出电压)	BIN	2	精确到小数点后一位
+    private BigDecimal dcAllowVoltage;
+    //充电输出电流(直 流最大输出电流)	BIN	2	单位：A，精确到小数点后二位
+    private BigDecimal dcAllowElectricity;
+    //剩余充电时间 BIN 2 字节 分
+    private int unDochargeDuration;
 
 
 
@@ -140,6 +146,10 @@ public class XunDaoChargeMonitorRequest extends BasePushResponse implements Seri
         request.setOrderNo(msg.getCardNo());
         request.setSoc(msg.getSoc());
         request.setNeedTime(0 == msg.getNeedTime() ? 0 : msg.getNeedTime() / 60);
+        request.setPileType(msg.getPileType());
+        request.setDcAllowElectricity(msg.getHighestAllowElectricity());
+        request.setDcAllowVoltage(msg.getHighestAllowVoltage());
+        request.setUnDochargeDuration(0 == msg.getNeedTime() ? 0 : msg.getNeedTime() / 60);
 
         return request;
     }

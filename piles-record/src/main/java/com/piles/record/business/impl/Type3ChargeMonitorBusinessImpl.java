@@ -27,6 +27,7 @@ public class Type3ChargeMonitorBusinessImpl implements IBusiness {
 
         //依照报文体规则解析报文
         Type3UploadChargeMonitorRequest uploadChargeMonitorRequest = Type3UploadChargeMonitorRequest.packEntity(dataBytes);
+        log.info("接收到type3充电桩上传充电过程监测数据报文:{}", uploadChargeMonitorRequest.toString());
         String order = String.valueOf(BytesUtil.type3ControlByte2Int(BytesUtil.copyBytes(msg, 5, 1)));
         //依照报文体规则解析报文
         XunDaoChargeMonitorRequest remoteStartRequest = XunDaoChargeMonitorRequest.packEntityType3(uploadChargeMonitorRequest);

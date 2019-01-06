@@ -88,27 +88,27 @@ public class Type3UploadChargeMonitorRequest implements Serializable {
         cursor += 1;
         request.setFee(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 4))));
         cursor += 12;
-        request.setHighestAllowVoltage(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2))).divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP));
+        request.setHighestAllowVoltage(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2))).divide(new BigDecimal(10), 2, BigDecimal.ROUND_HALF_UP));
         cursor += 2;
-        request.setHighestAllowElectricity(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2))).divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP));
+        request.setHighestAllowElectricity(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2))).divide(new BigDecimal(10), 2, BigDecimal.ROUND_HALF_UP));
         cursor += 2;
-        request.setBmsAv(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2))).divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP));
+        request.setBmsAv(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2))).divide(new BigDecimal(10), 2, BigDecimal.ROUND_HALF_UP));
         cursor += 2;
-        request.setBmsAn(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2))).divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP));
+        request.setBmsAn(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2))).divide(new BigDecimal(10), 2, BigDecimal.ROUND_HALF_UP));
         cursor += 2;
         request.setBmsType(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 1))));
         cursor += 1;
-        request.setAv(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2))).divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP));
+        request.setAv(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2))).divide(new BigDecimal(10), 2, BigDecimal.ROUND_HALF_UP));
         cursor += 2;
-        request.setBv(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2))).divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP));
+        request.setBv(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2))).divide(new BigDecimal(10), 2, BigDecimal.ROUND_HALF_UP));
         cursor += 2;
-        request.setCv(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2))).divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP));
+        request.setCv(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2))).divide(new BigDecimal(10), 2, BigDecimal.ROUND_HALF_UP));
         cursor += 2;
-        request.setAn(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2))).divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP));
+        request.setAn(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2))).divide(new BigDecimal(10), 2, BigDecimal.ROUND_HALF_UP));
         cursor += 2;
-        request.setBn(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2))).divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP));
+        request.setBn(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2))).divide(new BigDecimal(10), 2, BigDecimal.ROUND_HALF_UP));
         cursor += 2;
-        request.setCn(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2))).divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP));
+        request.setCn(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2))).divide(new BigDecimal(10), 2, BigDecimal.ROUND_HALF_UP));
         cursor += 2;
         request.setNeedTime(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2)));
         cursor += 2;
@@ -133,7 +133,13 @@ public class Type3UploadChargeMonitorRequest implements Serializable {
         request.setStartTime(BytesUtil.byte2Date(BytesUtil.copyBytes(msg, cursor, 7)));
         cursor += 16;
         request.setChargeW(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 4))).divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP));
-        request.setPileType(TradeType.HONG_JIALI.getCode());
+        int pileType = 6;
+        if (request.getGunNums() == 2) {
+            pileType = 6;
+        } else {
+            pileType = 5;
+        }
+        request.setPileType(pileType);
         return request;
     }
 
