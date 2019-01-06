@@ -45,6 +45,9 @@ public class Type3BusinessFactory implements IBusinessFactory {
             //设置电价
             case 1104:
                 return SpringContextUtil.getBean("type3SetChargePlotBusiness");
+            //设置电价
+            case 114:
+                return SpringContextUtil.getBean("type3ChargeMonitorBusiness");
 
 
             default:

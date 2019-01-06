@@ -119,6 +119,24 @@ public class XunDaoChargeMonitorRequest extends BasePushResponse implements Seri
         return request;
     }
 
+    /**
+     * 解析报文并封装request体
+     *
+     * @param msg
+     * @return
+     */
+    public static XunDaoChargeMonitorRequest packEntityType3(byte[] msg) {
+        XunDaoChargeMonitorRequest request = new XunDaoChargeMonitorRequest();
+
+        int cursor = 0;
+        request.setGunNo(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 1)));
+        cursor++;
+        request.setWorkStatus(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 1)) + "");
+        cursor++;
+
+        return request;
+    }
+
     public static byte[] packBytes(XunDaoChargeMonitorRequest request) {
         byte[] responseBytes = new byte[]{};
         return responseBytes;

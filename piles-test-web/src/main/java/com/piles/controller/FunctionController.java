@@ -178,6 +178,11 @@ public class FunctionController {
     @RequestMapping(value = "/pileChargeStatus", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> chargeStatus(PileChargeStatusRequest pileChargeStatusRequest) {
+        if (pileChargeStatusRequest.getTradeTypeCode() == TradeType.HONG_JIALI.getCode()) {
+            Random random = new Random();
+            int i = random.nextInt(255);
+            pileChargeStatusRequest.setSerial(String.valueOf(i));
+        }
         log.info("查询充电桩充电进度:" + JSON.toJSONString(pileChargeStatusRequest));
 
         Map<String, Object> map = new HashedMap();
