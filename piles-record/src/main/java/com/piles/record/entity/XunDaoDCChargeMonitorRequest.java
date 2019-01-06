@@ -180,7 +180,6 @@ public class XunDaoDCChargeMonitorRequest extends BasePushResponse implements Se
 
     public static void main(String[] args) {
         int x = 1006;
-        byte[] bytes1 = BytesUtil.intToBytesLittle(x);
         byte[] b = new byte[]{0x01};
         System.out.println(BytesUtil.bcd2StrLittle(b));
         BytesUtil.bcd2StrLittle(b);

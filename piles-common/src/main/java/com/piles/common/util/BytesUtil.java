@@ -279,7 +279,7 @@ public class BytesUtil {
      */
     public static byte[] intToBytesLittle(int value) {
         //limit 传入2
-        return intToBytes(value, 2);
+        return revert(intToBytes(value, 2));
     }
 
     /**
@@ -513,6 +513,33 @@ public class BytesUtil {
 
         LocalDateTime localDateTime = LocalDateTime.of(year + 2000, month, day, hour, min, ms / 1000);
         Date date = JdkDateUtil.localDateTime2Date(localDateTime);
+        return date;
+    }
+
+    /**
+     * cp56time2a 格式转date格式
+     */
+    public static Date byte2Date(byte[] bytes) {
+        if (bytes == null || bytes.length != 7) {
+            return null;
+        }
+        int year = bytesToIntLittle(copyBytes(bytes, 0, 4));
+        int month = bytesToIntLittle(copyBytes(bytes, 2, 1));
+        int day = bytesToIntLittle(copyBytes(bytes, 3, 1));
+        int hour = bytesToIntLittle(copyBytes(bytes, 4, 1));
+        int min = bytesToIntLittle(copyBytes(bytes, 5, 1));
+        int ms = bytesToIntLittle(copyBytes(bytes, 6, 1));
+        if (month == 0 || day == 0 || year == 0) {
+            return null;
+        }
+
+        Date date = new Date();
+        date.setYear(year);
+        date.setMonth(month);
+        date.setDate(day);
+        date.setHours(hour);
+        date.setMinutes(min);
+        date.setSeconds(ms);
         return date;
     }
 

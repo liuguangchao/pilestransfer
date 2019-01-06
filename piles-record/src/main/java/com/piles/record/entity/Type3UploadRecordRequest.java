@@ -26,9 +26,9 @@ public class Type3UploadRecordRequest implements Serializable {
     //物理卡号 BIN 码 8Byte
     private long cardNo;
     //开始时间 BIN 码 7Byte 小端 CP56Time2a 格式
-    private String startTime;
+    private Date startTime;
     //结束时间 BIN 码 7Byte 小端 CP56Time2a 格式
-    private String endTime;
+    private Date endTime;
     private long chargeTime;
     //开始 SOC BIN 码 1Byte 精确到 1%，1 表示 SOC=1% 类 推
     private int beginSoc;
@@ -59,7 +59,7 @@ public class Type3UploadRecordRequest implements Serializable {
         Type3UploadRecordRequest request = new Type3UploadRecordRequest();
         int cursor = 0;
         int j = 0;
-        while (msg[j] != 0x00) {
+        while (msg[j] != 0x00 && j != 32) {
             j++;
         }
         request.setPileNo(BytesUtil.ascii2Str(BytesUtil.copyBytes(msg, cursor, j)));
@@ -69,26 +69,17 @@ public class Type3UploadRecordRequest implements Serializable {
         request.setGunNo(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 1)));
         cursor += 1;
         j = 0;
-        while (msg[cursor + j] != 0x00) {
+        while (msg[cursor + j] != 0x00 && j != 32) {
             j++;
         }
         request.setCardNo(Long.valueOf(BytesUtil.ascii2Str(BytesUtil.copyBytes(msg, cursor, j))));
         cursor += 32;
         j = 0;
-        String date = "";
-        while (msg[cursor + j] != 0xff) {
-            date += BytesUtil.bytesToInt(BytesUtil.copyBytes(msg, cursor, j), 1);
-            j++;
-        }
-        request.setStartTime(date);
+
+        request.setStartTime(BytesUtil.byte2Date(BytesUtil.copyBytes(msg, cursor, 7)));
         cursor += 8;
-        j = 0;
-        date = "";
-        while (msg[cursor + j] != 0xff) {
-            date += BytesUtil.bytesToInt(BytesUtil.copyBytes(msg, cursor, j), 1);
-            j++;
-        }
-        request.setEndTime(date);
+
+        request.setEndTime(BytesUtil.byte2Date(BytesUtil.copyBytes(msg, cursor, 7)));
         cursor += 8;
         request.setChargeTime(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 4)));
         cursor += 4;
@@ -102,7 +93,7 @@ public class Type3UploadRecordRequest implements Serializable {
         cursor += 16;
         request.setInnerNo(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 4)));
         cursor += 22;
-        while (msg[cursor + j] != 0x00) {
+        while (msg[cursor + j] != 0x00 && j != 17) {
             j++;
         }
         request.setVin(BytesUtil.ascii2Str(BytesUtil.copyBytes(msg, cursor, j)));

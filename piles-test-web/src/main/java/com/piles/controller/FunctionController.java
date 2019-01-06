@@ -152,7 +152,7 @@ public class FunctionController {
                             break;
                     }
                     break;
-                case 3:
+                case 4:
 
                     Integer workStatus = GunStatusMapUtil.get(pileStatusRequest.getPileNo(), pileStatusRequest.getTradeTypeCode(), pileStatusRequest.getGunNo());
                     //当电流存在，并且大于0小于等于1的时候返回true

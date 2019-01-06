@@ -36,22 +36,23 @@ public class Type3LoginBusinessImpl implements IBusiness {
         //调用底层接口
         boolean flag = loginService.login(loginRequest);
         if (flag) {
-            ChannelEntity channelEntity = new ChannelEntity(loginRequest.getPileNo(), TradeType.fromCode(TradeType.HONG_JIALI.getCode()));
-            ChannelMapByEntity.removeChannel(channelEntity);
+            ChannelEntity channelEntity = new ChannelEntity(loginRequest.getPileNo().trim(), TradeType.fromCode(TradeType.HONG_JIALI.getCode()));
             ChannelMapByEntity.addChannel(channelEntity, incoming);
             ChannelMapByEntity.addChannel(incoming, channelEntity);
+
         }
+
         //组装返回报文体
 
         byte[] head = BytesUtil.copyBytes(msg, 0, 6);
         byte[] cmd = BytesUtil.intToBytesLittle(105);
         byte[] data = Bytes.concat(BytesUtil.rightPadBytes(new byte[4], 4, (byte) 0x00),
-                BytesUtil.intToBytesLittle((int) Math.random(), 4),
+                BytesUtil.copyBytes(msg, msg.length - 10, 4),
                 BytesUtil.rightPadBytes(new byte[134], 134, (byte) 0x00),
                 BytesUtil.rightPadBytes(new byte[1], 1, (byte) 0x00));
         byte[] crc = new byte[]{CRC16Util.getType3CRC(Bytes.concat(cmd, data))};
         int length = head.length + cmd.length + data.length + crc.length;
-        byte[] lengths = BytesUtil.intToBytes(length);
+        byte[] lengths = BytesUtil.intToBytesLittle(length);
         head[2] = lengths[0];
         head[3] = lengths[1];
         return Bytes.concat(head, cmd, data, crc);

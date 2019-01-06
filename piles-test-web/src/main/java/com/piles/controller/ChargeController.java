@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import java.util.Map;
+import java.util.Random;
 
 import static com.piles.common.entity.type.EPushResponseCode.CONNECT_ERROR;
 import static com.piles.common.entity.type.EPushResponseCode.READ_OK;
@@ -47,6 +48,11 @@ public class ChargeController {
     @RequestMapping(value = "/charge", method = RequestMethod.POST)
     @ResponseBody
     public Map<String, Object> charge(ChargeRemoteStartRequest remoteStartRequest) {
+        if (remoteStartRequest.getTradeTypeCode() == TradeType.HONG_JIALI.getCode()) {
+            Random random = new Random();
+            int i = random.nextInt(255);
+            remoteStartRequest.setSerial(String.valueOf(i));
+        }
         Map<String, Object> map = new HashedMap();
         try {
             log.info("请求充电请求信息:" + JSON.toJSONString(remoteStartRequest));
@@ -109,7 +115,7 @@ public class ChargeController {
 
             log.info( "return请求充电请求fan:" + JSON.toJSONString( map ) );
         }catch (Exception e){
-            log.error( "-----------error"+e );
+            log.error("-----------error" + e.getMessage(), e);
         }
         return map;
 
@@ -251,6 +257,11 @@ public class ChargeController {
     @RequestMapping(value = "/stopCharge", method = RequestMethod.POST)
     @ResponseBody
     public Map<String, Object> stopCharge(ChargeRemoteStopRequest chargeRemoteStopRequest) {
+        if (chargeRemoteStopRequest.getTradeTypeCode() == TradeType.HONG_JIALI.getCode()) {
+            Random random = new Random();
+            int i = random.nextInt(255);
+            chargeRemoteStopRequest.setSerial(String.valueOf(i));
+        }
         log.info("请求停止充电请求信息:" + JSON.toJSONString(chargeRemoteStopRequest));
         RemoteClosePushRequest remoteClosePushRequest = new RemoteClosePushRequest();
         BeanUtils.copyProperties(chargeRemoteStopRequest,remoteClosePushRequest);

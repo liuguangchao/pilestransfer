@@ -17,8 +17,8 @@ import javax.annotation.Resource;
 public class Type3BaseChannelHandler extends SimpleChannelInboundHandler<byte[]> {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Resource(name = "xunDaoBusinessHandler")
-    private IBusinessHandler xunDaoBusinessHandler;
+    @Resource(name = "type3BusinessHandler")
+    private IBusinessHandler type3BusinessHandler;
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, byte[] msg) throws Exception {
@@ -28,7 +28,7 @@ public class Type3BaseChannelHandler extends SimpleChannelInboundHandler<byte[]>
             temp += " " + Integer.toHexString(Byte.toUnsignedInt(b));
         }
         logger.info("[" + incoming.remoteAddress() + "]【type3】发送请求信息:" + temp);
-        byte[] response = xunDaoBusinessHandler.process(msg, incoming);
+        byte[] response = type3BusinessHandler.process(msg, incoming);
         if (response != null) {
             ctx.writeAndFlush(response);
             temp = "";

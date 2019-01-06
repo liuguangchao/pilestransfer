@@ -50,23 +50,6 @@ public class CRC16Util {
 
     }
 
-    // 测试
-    public static void main(String[] args) {
-//        0x2b
-
-//        String s=Integer.toHexString( Byte.toUnsignedInt( (byte)0x2b ) );
-//        System.out.println(s);
-        //68 01 00 00 00 1D 10 00 02 54 84 56 18 35 02 02 00 00 00 00 00 00 00 01 00 01 02 00 00 00 04 00 00 00 01 2B D9
-//        byte[] temp=new byte[]{(byte)0x8B,0x00,0x00,0x00,0x09,0x00,0x00,0x00,0x04,0x00,0x00,0x00,0x01,0x00};
-//        int crc = CRC16Util.getCRC(temp );
-//        System.out.println( Integer.toHexString( crc ) );
-//
-//        System.out.println(checkMsg( temp ));
-//        System.out.println();
-        byte[] xunDaoCRC = getXunDaoCRC(BytesUtil.intToBytesLittle(221421444));
-        String str = "0.0.5 -N- 172.18.66.43 iflight.java.dsf.itradecore 201711081638 BOOK_VALIDATE S1 check_cabin ERROR";
-            System.out.println(str.length());
-    }
 
     /**
      * 循道 求crc算法，是将数据内容转int累加 然后取模256，返回两位字节
@@ -103,9 +86,19 @@ public class CRC16Util {
             int y = BytesUtil.bytesToIntLittle(new byte[]{dataByte});
             crc += y;
         }
-        byte[] temp = BytesUtil.intToBytesLittle(crc);
+        byte[] temp = BytesUtil.intToBytes(crc);
 
         return temp[temp.length - 1];
+    }
+
+    public static void main(String[] args) {
+        byte[] msg = new byte[]{
+                (byte) 0xaa, (byte) 0xf5, (byte) 0x6d, (byte) 0x0, (byte) 0x3, (byte) 0x2e, (byte) 0x6a, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x31, (byte) 0x32, (byte) 0x33, (byte) 0x34, (byte) 0x35, (byte) 0x36, (byte) 0x37, (byte) 0x38, (byte) 0x39, (byte) 0x31, (byte) 0x32, (byte) 0x33, (byte) 0x34, (byte) 0x35, (byte) 0x36, (byte) 0x37, (byte) 0x38, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x2, (byte) 0x3c, (byte) 0x0, (byte) 0x0, (byte) 0x2, (byte) 0x1, (byte) 0x3, (byte) 0x1, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x20, (byte) 0x19, (byte) 0x1, (byte) 0x6, (byte) 0x10, (byte) 0x35, (byte) 0x14, (byte) 0xff, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x1d, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0xe5
+        };
+        byte[] crcBytes = BytesUtil.copyBytes(msg, msg.length - 1, 1);
+        byte checkBytes = CRC16Util.getType3CRC(BytesUtil.copyBytes(msg, 6, msg.length - 7));
+        System.out.println(crcBytes[0]);
+        System.out.println(checkBytes);
     }
 
 }

@@ -72,7 +72,7 @@ public class Type3UploadChargeMonitorBusinessImpl implements IBusiness {
 
         byte[] crc = new byte[]{CRC16Util.getType3CRC(Bytes.concat(cmd, dataTemp))};
         int length = head.length + cmd.length + dataTemp.length + crc.length;
-        byte[] lengths = BytesUtil.intToBytes(length);
+        byte[] lengths = BytesUtil.intToBytesLittle(length);
         head[2] = lengths[0];
         head[3] = lengths[1];
         return Bytes.concat(head, cmd, dataTemp, crc);

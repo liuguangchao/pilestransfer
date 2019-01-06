@@ -43,21 +43,19 @@ public class RemoteStartRequest extends BasePushResponse implements Serializable
      */
     public static RemoteStartRequest type3PackEntity(byte[] msg) {
         RemoteStartRequest request = new RemoteStartRequest();
-        byte[] serials = BytesUtil.copyBytes(msg, 12, 32);
+        byte[] serials = BytesUtil.copyBytes(msg, 49, 32);
         int i = 0;
         while (serials[i] != 0x00) {
             i++;
         }
         request.setOrderNo(Long.valueOf(BytesUtil.ascii2Str(BytesUtil.copyBytes(serials, 0, i))));
-        request.setResult(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, 45, 49)));
+        request.setResult(BytesUtil.bytesToInt(BytesUtil.copyBytes(msg, 45, 4), 1));
         return request;
     }
 
 
 
     public static void main(String[] args) {
-//        byte[] msg= new byte[]{0x10,0x00,0x02,0x54,(byte)0x84,0x56,0x18,0x35,0x02,0x02,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,0x00,0x01,0x02,0x00,0x00,0x00,0x04,0x00,0x00,0x00,0x01};
-//        packEntity(msg);
 
     }
 

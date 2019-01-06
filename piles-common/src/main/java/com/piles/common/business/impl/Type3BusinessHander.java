@@ -34,8 +34,8 @@ public class Type3BusinessHander implements IBusinessHandler {
             log.error("报文长度为{},不识别的报文格式", msg.length);
             return null;
         }
-        if (0xAA != msg[0] && 0xF5 != msg[1]) {
-            log.error("报文起始位不是0xAA0xFa", msg.length);
+        if ((byte) 0xaa != msg[0] && (byte) 0xf5 != msg[1]) {
+            log.error("报文起始位不是0xAA0xF5", msg.length);
             return null;
         }
         //排除登录报文

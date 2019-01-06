@@ -31,7 +31,7 @@ public class Type3ChainTestBusinessImpl implements IBusiness {
                 BytesUtil.intToBytesLittle(serial, 2));
         byte[] crc = new byte[]{CRC16Util.getType3CRC(Bytes.concat(cmd, data))};
         int length = head.length + cmd.length + data.length + crc.length;
-        byte[] lengths = BytesUtil.intToBytes(length);
+        byte[] lengths = BytesUtil.intToBytesLittle(length);
         head[2] = lengths[0];
         head[3] = lengths[1];
         return Bytes.concat(head, cmd, data, crc);

@@ -4,11 +4,13 @@ package com.piles.common.util;
 import com.piles.common.entity.ChannelEntity;
 import com.piles.common.entity.type.TradeType;
 import io.netty.channel.Channel;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 
+@Slf4j
 public class ChannelMapByEntity {
 
     private ChannelMapByEntity() {
@@ -66,6 +68,8 @@ public class ChannelMapByEntity {
         return channelMap2.get(channelEntity.getTradeType().getCode()+"_"+channelEntity.getPileNo());
     }
     public static Channel getChannel(int tradeTypeCode,String pileNo) {
+        pileNo = pileNo.trim();
+
         return channelMap2.get(tradeTypeCode+"_"+pileNo);
     }
     public static ChannelEntity getChannel(Channel channel) {

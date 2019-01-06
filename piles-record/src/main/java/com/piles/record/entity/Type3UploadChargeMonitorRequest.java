@@ -50,8 +50,9 @@ public class Type3UploadChargeMonitorRequest implements Serializable {
     private BigDecimal chargeQuantity;
     private int chargeByType;
     private int chargeType;
+    private BigDecimal chargeData;
     private String cardNo;
-    private String startTime;
+    private Date startTime;
 
     private BigDecimal chargeW;
 
@@ -117,23 +118,19 @@ public class Type3UploadChargeMonitorRequest implements Serializable {
         cursor += 12;
         request.setChargeByType(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 1)));
         cursor += 1;
-        request.setChargeType(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 6)));
-        cursor += 6;
+        request.setChargeType(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 1)));
+        cursor += 1;
+        request.setChargeData(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 4))).divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP));
+        cursor += 5;
 
         j = 0;
-        while (msg[j] != 0x00) {
+        while (msg[cursor + j] != 0x00 || 32 == j) {
             j++;
         }
         request.setCardNo(BytesUtil.ascii2Str(BytesUtil.copyBytes(msg, cursor, j)));
         cursor += 33;
-        j = 0;
-        String date = "";
-        while (msg[cursor + j] != 0xff) {
-            date += BytesUtil.bytesToInt(BytesUtil.copyBytes(msg, cursor, j), 1);
-            j++;
-        }
 
-        request.setStartTime(date);
+        request.setStartTime(BytesUtil.byte2Date(BytesUtil.copyBytes(msg, cursor, 7)));
         cursor += 16;
         request.setChargeW(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 4))).divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP));
         request.setPileType(TradeType.HONG_JIALI.getCode());
@@ -173,5 +170,14 @@ public class Type3UploadChargeMonitorRequest implements Serializable {
                 ", startTime='" + startTime + '\'' +
                 ", chargeW=" + chargeW +
                 '}';
+    }
+
+    public static void main(String[] args) {
+        byte[] msg = new byte[]{(byte) 0xaa, (byte) 0xf5, (byte) 0xc8, (byte) 0x0, (byte) 0x3, (byte) 0xa9, (byte) 0x68, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x31, (byte) 0x32, (byte) 0x33, (byte) 0x34, (byte) 0x35, (byte) 0x36, (byte) 0x37, (byte) 0x38, (byte) 0x39, (byte) 0x31, (byte) 0x32, (byte) 0x33, (byte) 0x34, (byte) 0x35, (byte) 0x36, (byte) 0x37, (byte) 0x38, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x2, (byte) 0x1, (byte) 0x1, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x2, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x2, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x52, (byte) 0x3d, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0xff, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x48, (byte) 0x0, (byte) 0x3d, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x0, (byte) 0x4};
+        byte[] dataBytes = BytesUtil.copyBytes(msg, 12, (msg.length - 12));
+
+        //依照报文体规则解析报文
+        Type3UploadChargeMonitorRequest uploadChargeMonitorRequest = Type3UploadChargeMonitorRequest.packEntity(dataBytes);
+        System.out.println(uploadChargeMonitorRequest.toString());
     }
 }

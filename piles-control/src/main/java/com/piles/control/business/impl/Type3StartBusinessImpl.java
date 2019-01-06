@@ -23,7 +23,7 @@ public class Type3StartBusinessImpl implements IBusiness {
         String order = String.valueOf(BytesUtil.type3ControlByte2Int(BytesUtil.copyBytes(msg, 5, 1)));
         //依照报文体规则解析报文
         RemoteStartRequest remoteStartRequest = RemoteStartRequest.type3PackEntity(msg);
-        log.info("接收到【type3】充电命令" + remoteStartRequest.toString());
+        log.info("接收到【type3】充电命令返回报文" + remoteStartRequest.toString());
         ChannelResponseCallBackMap.callBack(incoming, order, remoteStartRequest);
         return null;
     }

@@ -75,10 +75,10 @@ public class RemoteClosePushRequest extends BasePushRequest implements Serializa
      */
     public static byte[] packBytesType3(RemoteClosePushRequest request) {
 
-        byte[] data = Bytes.concat(new byte[]{0x00, 0x00, 0x00, 0x00}, BytesUtil.intToBytes(request.getGunNo(), 1), BytesUtil.intToBytes(2, 4), new byte[]{0x01},
-                BytesUtil.intToBytes(4, 1), BytesUtil.intToBytes(4, 2), new byte[]{0x55, 0x55, 0x55, 0x55}
+        byte[] data = Bytes.concat(new byte[]{0x00, 0x00, 0x00, 0x00}, BytesUtil.intToBytesLittle(request.getGunNo() + 1, 1), BytesUtil.intToBytesLittle(2, 4), new byte[]{0x01},
+                BytesUtil.intToBytesLittle(4, 1), BytesUtil.intToBytesLittle(4, 2), new byte[]{0x55, 0x55, 0x55, 0x55}
         );
-        byte[] serial = BytesUtil.intToBytes(Integer.parseInt(request.getSerial()), 1);
+        byte[] serial = BytesUtil.intToBytesLittle(Integer.parseInt(request.getSerial()), 1);
 
         byte[] head = new byte[]{(byte) 0xAA, (byte) 0xF5, 0x00, 0x00, 0x10};
         head = Bytes.concat(head, serial);
@@ -87,7 +87,7 @@ public class RemoteClosePushRequest extends BasePushRequest implements Serializa
 
         byte[] crc = new byte[]{CRC16Util.getType3CRC(Bytes.concat(cmd, data))};
         int length = head.length + cmd.length + data.length + crc.length;
-        byte[] lengths = BytesUtil.intToBytes(length);
+        byte[] lengths = BytesUtil.intToBytesLittle(length);
         head[2] = lengths[0];
         head[3] = lengths[1];
         return Bytes.concat(head, cmd, data, crc);

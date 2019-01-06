@@ -117,7 +117,7 @@ public class RemoteStartPushRequest extends BasePushRequest implements Serializa
         byte[] contrl = BytesUtil.xundaoControlInt2Byte(Integer.parseInt(request.getSerial()));
         byte[] type = new byte[]{(byte) 0x85};
 
-        byte[] beiyong = BytesUtil.intToBytesLittle(request.getGunNo(),1);
+        byte[] beiyong = BytesUtil.intToBytesLittle(request.getGunNo() + 1, 1);
 //        byte[] beiyong = 1 == request.getGunNo() ? new byte[]{0x00} : new byte[]{0x01};
         byte[] reason = ChannelMapByEntity.getPileTypeArr(request.getPileNo());
         byte[] crc = CRC16Util.getXunDaoCRC(data);
@@ -166,12 +166,12 @@ public class RemoteStartPushRequest extends BasePushRequest implements Serializa
                 break;
         }
         byte[] orderNo = BytesUtil.rightPadBytes(String.valueOf(request.getOrderNo()).getBytes(), 32, (byte) 0x00);
-        byte[] data = Bytes.concat(new byte[]{0x00, 0x00, 0x00, 0x00}, BytesUtil.intToBytes(request.getGunNo(), 1), new byte[]{0x00, 0x00, 0x00, 0x00},
-                BytesUtil.intToBytes(Integer.parseInt(request.getChargeStopCode()), 4),
-                BytesUtil.intToBytes(model, 1), BytesUtil.intToBytesLittle(dataint, 4), new byte[]{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
+        byte[] data = Bytes.concat(new byte[]{0x00, 0x00, 0x00, 0x00}, BytesUtil.intToBytesLittle(request.getGunNo(), 1), new byte[]{0x00, 0x00, 0x00, 0x00},
+                BytesUtil.intToBytesLittle(Integer.parseInt(request.getChargeStopCode()), 4),
+                BytesUtil.intToBytesLittle(model, 1), BytesUtil.intToBytesLittle(dataint, 4), new byte[]{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
                 orderNo, new byte[]{0x01, 0x00, 0x00, 0x00, 0x00}, orderNo
         );
-        byte[] serial = BytesUtil.intToBytes(Integer.parseInt(request.getSerial()), 1);
+        byte[] serial = BytesUtil.intToBytesLittle(Integer.parseInt(request.getSerial()), 1);
 
         byte[] head = new byte[]{(byte) 0xAA, (byte) 0xF5, 0x00, 0x00, 0x10};
         head = Bytes.concat(head, serial);
@@ -180,10 +180,17 @@ public class RemoteStartPushRequest extends BasePushRequest implements Serializa
 
         byte[] crc = new byte[]{CRC16Util.getType3CRC(Bytes.concat(cmd, data))};
         int length = head.length + cmd.length + data.length + crc.length;
-        byte[] lengths = BytesUtil.intToBytes(length);
+        byte[] lengths = BytesUtil.intToBytesLittle(length);
         head[2] = lengths[0];
         head[3] = lengths[1];
         return Bytes.concat(head, cmd, data, crc);
         //组装返回报文体
+    }
+
+    public static void main(String[] args) {
+        byte[] serial = BytesUtil.intToBytesLittle(1237, 1);
+        System.out.println(serial[0]);
+
+        System.out.println(BytesUtil.bytesToInt(new byte[]{(byte) 0xff}, 1));
     }
 }
