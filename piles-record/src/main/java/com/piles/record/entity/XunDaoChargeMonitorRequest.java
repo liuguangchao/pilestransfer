@@ -139,17 +139,17 @@ public class XunDaoChargeMonitorRequest extends BasePushResponse implements Seri
         request.setGunNo(msg.getGunNo());
         request.setPileNo(msg.getPileNo());
         request.setActivElectricalDegree(msg.getChargeQuantity());
-        request.setChargeDuration(0 == msg.getChargeTime() ? 0 : msg.getChargeTime() / 60);
+        request.setChargeDuration(msg.getChargeTime());
         request.setCurrentChargeQuantity(msg.getChargeQuantity());
         request.setHighestAllowElectricity(msg.getHighestAllowElectricity());
         request.setHighestAllowVoltage(msg.getHighestAllowVoltage());
         request.setOrderNo(msg.getCardNo());
         request.setSoc(msg.getSoc());
-        request.setNeedTime(0 == msg.getNeedTime() ? 0 : msg.getNeedTime() / 60);
+        request.setNeedTime(msg.getNeedTime());
         request.setPileType(msg.getPileType());
         request.setDcAllowElectricity(msg.getHighestAllowElectricity());
         request.setDcAllowVoltage(msg.getHighestAllowVoltage());
-        request.setUnDochargeDuration(0 == msg.getNeedTime() ? 0 : msg.getNeedTime() / 60);
+        request.setUnDochargeDuration(msg.getNeedTime());
 
         return request;
     }
