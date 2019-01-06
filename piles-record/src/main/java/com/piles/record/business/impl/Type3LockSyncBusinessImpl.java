@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
  * 循道时钟同步接口逻辑
  */
 @Slf4j
-@Component("xunDaoLockSyncBusiness")
+@Component("type3LockSyncBusiness")
 public class Type3LockSyncBusinessImpl implements IBusiness {
 
 

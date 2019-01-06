@@ -15,8 +15,10 @@ import com.piles.entity.enums.ResponseCode;
 import com.piles.entity.vo.*;
 import com.piles.record.entity.XunDaoChargeMonitorRequest;
 import com.piles.record.service.IChargeMonitorPushService;
+import com.piles.setting.entity.SetChargePlotRequest;
 import com.piles.setting.entity.Type3SetChargeFeePushRequest;
 import com.piles.setting.entity.XunDaoModifyIPPushRequest;
+import com.piles.setting.service.IType3SetChargeFeeService;
 import com.piles.setting.service.IXunDaoModifyIPeService;
 import com.piles.util.ServiceFactoryUtil;
 import io.netty.channel.Channel;
@@ -25,6 +27,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -355,6 +358,9 @@ public class FunctionController {
 
     }
 
+    @Autowired
+    IType3SetChargeFeeService type3SetChargeFeeService;
+
     @RequestMapping(value = "/setChargeFee", method = RequestMethod.POST)
     @ResponseBody
     public Map chargeFee(ChargeFeeRequest request) {
@@ -379,7 +385,32 @@ public class FunctionController {
 
         Type3SetChargeFeePushRequest pushRequest = new Type3SetChargeFeePushRequest();
         BeanUtils.copyProperties(request, pushRequest);
+        BasePushCallBackResponse<SetChargePlotRequest> response = type3SetChargeFeeService.doPush(pushRequest);
 
+        if (response.getCode() != READ_OK) {
+            //重试1
+            response = type3SetChargeFeeService.doPush(pushRequest);
+        }
+
+        switch (response.getCode()) {
+            case READ_OK:
+                map.put("status", READ_OK.getCode());
+                map.put("msg", "设置电价进度成功,详细结果见结果");
+                map.put("data", response.getObj());
+                break;
+            case TIME_OUT:
+            case WRITE_OK:
+                map.put("status", 300);
+                map.put("msg", "请求超时");
+                break;
+            case CONNECT_ERROR:
+                map.put("status", CONNECT_ERROR.getCode());
+                map.put("msg", "充电桩链接不可用");
+                break;
+            default:
+                break;
+
+        }
 
         log.info("return请求设置电价地址请求结果{}:", JSON.toJSONString(map));
         return map;

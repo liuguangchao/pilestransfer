@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
  * 远程开始充电给充电桩发送消息实现类
  */
 @Slf4j
-@Service("remoteStartPushService_3")
+@Service("remoteStartPushService_4")
 public class Type3RemoteStartPushServiceImpl implements IRemoteStartPushService {
     @Resource(name = "type3PushBusinessImpl")
     IPushBusiness pushBusiness;
