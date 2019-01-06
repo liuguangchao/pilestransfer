@@ -363,24 +363,6 @@ public class FunctionController {
     @RequestMapping(value = "/setChargeFee", method = RequestMethod.POST)
     @ResponseBody
     public Map chargeFee(ChargeFeeRequest request) {
-        ChargeFeeRequest chargeFeeRequest = new ChargeFeeRequest();
-        chargeFeeRequest.setSerial("123");
-        chargeFeeRequest.setPileNo("12345678912345678");
-        chargeFeeRequest.setTradeTypeCode(4);
-        List<FeeInfo> feeInfoList = new ArrayList<>();
-        for (int i = 0; i < 16; i++) {
-            FeeInfo feeInfo = new FeeInfo();
-            feeInfo.setIndex(i);
-            feeInfo.setStartHour(i);
-            feeInfo.setStartMin(i);
-            feeInfo.setEndHour(i);
-            feeInfo.setEndMin(i);
-            feeInfo.setFee(new BigDecimal(i));
-            feeInfoList.add(feeInfo);
-        }
-        Collections.sort(feeInfoList);
-        chargeFeeRequest.setFeeInfoList(feeInfoList);
-        request = chargeFeeRequest;
         if (request.getTradeTypeCode() == TradeType.HONG_JIALI.getCode()) {
             Random random = new Random();
             int i = random.nextInt(255);

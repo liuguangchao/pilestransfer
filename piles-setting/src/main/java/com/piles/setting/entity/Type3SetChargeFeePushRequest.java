@@ -48,7 +48,7 @@ public class Type3SetChargeFeePushRequest extends BasePushRequest implements Ser
             byte[] startMin = BytesUtil.intToBytes(feeInfo.getStartMin(), 1);
             byte[] endHour = BytesUtil.intToBytes(feeInfo.getEndHour(), 1);
             byte[] endMin = BytesUtil.intToBytes(feeInfo.getEndMin(), 1);
-            byte[] dataint = BytesUtil.intToBytes(feeInfo.getFee().multiply(new BigDecimal(100)).intValue(), 4);
+            byte[] dataint = BytesUtil.intToBytesLittle(feeInfo.getFee().multiply(new BigDecimal(100)).intValue(), 4);
             data = Bytes.concat(data, startHour, startMin, endHour, endMin, dataint);
         }
         byte[] serial = BytesUtil.intToBytes(Integer.parseInt(request.getSerial()), 1);
@@ -60,13 +60,19 @@ public class Type3SetChargeFeePushRequest extends BasePushRequest implements Ser
 
         byte[] crc = new byte[]{CRC16Util.getType3CRC(Bytes.concat(cmd, data))};
         int length = head.length + cmd.length + data.length + crc.length;
-        byte[] lengths = BytesUtil.intToBytes(length);
+        byte[] lengths = BytesUtil.intToBytesLittle(length);
         head[2] = lengths[0];
         head[3] = lengths[1];
         return Bytes.concat(head, cmd, data, crc);
     }
 
     public static void main(String[] args) {
+        byte[] msg = BytesUtil.intToBytesLittle(1103);
+        String temp = "";
+        for (byte b : msg) {
+            temp += " " + Integer.toHexString(Byte.toUnsignedInt(b));
+        }
+        System.out.println(temp);
         Type3SetChargeFeePushRequest chargeFeeRequest = new Type3SetChargeFeePushRequest();
         chargeFeeRequest.setSerial("123");
         chargeFeeRequest.setPileNo("12345678912345678");
@@ -84,12 +90,13 @@ public class Type3SetChargeFeePushRequest extends BasePushRequest implements Ser
         }
         Collections.sort(feeInfoList);
         chargeFeeRequest.setFeeInfoList(feeInfoList);
-        byte[] msg = packBytes(chargeFeeRequest);
-        String temp = "";
+        msg = packBytes(chargeFeeRequest);
+        temp = "";
         for (byte b : msg) {
             temp += " " + Integer.toHexString(Byte.toUnsignedInt(b));
         }
         System.out.println(temp);
     }
+
 
 }
