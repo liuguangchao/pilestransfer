@@ -15,6 +15,7 @@ import com.piles.entity.enums.ResponseCode;
 import com.piles.entity.vo.*;
 import com.piles.record.entity.XunDaoChargeMonitorRequest;
 import com.piles.record.service.IChargeMonitorPushService;
+import com.piles.setting.entity.FeeInfo;
 import com.piles.setting.entity.SetChargePlotRequest;
 import com.piles.setting.entity.Type3SetChargeFeePushRequest;
 import com.piles.setting.entity.XunDaoModifyIPPushRequest;
@@ -36,9 +37,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.piles.common.entity.type.EPushResponseCode.CONNECT_ERROR;
@@ -364,6 +363,29 @@ public class FunctionController {
     @RequestMapping(value = "/setChargeFee", method = RequestMethod.POST)
     @ResponseBody
     public Map chargeFee(ChargeFeeRequest request) {
+        ChargeFeeRequest chargeFeeRequest = new ChargeFeeRequest();
+        chargeFeeRequest.setSerial("123");
+        chargeFeeRequest.setPileNo("12345678912345678");
+        chargeFeeRequest.setTradeTypeCode(4);
+        List<FeeInfo> feeInfoList = new ArrayList<>();
+        for (int i = 0; i < 16; i++) {
+            FeeInfo feeInfo = new FeeInfo();
+            feeInfo.setIndex(i);
+            feeInfo.setStartHour(i);
+            feeInfo.setStartMin(i);
+            feeInfo.setEndHour(i);
+            feeInfo.setEndMin(i);
+            feeInfo.setFee(new BigDecimal(i));
+            feeInfoList.add(feeInfo);
+        }
+        Collections.sort(feeInfoList);
+        chargeFeeRequest.setFeeInfoList(feeInfoList);
+        request = chargeFeeRequest;
+        if (request.getTradeTypeCode() == TradeType.HONG_JIALI.getCode()) {
+            Random random = new Random();
+            int i = random.nextInt(255);
+            request.setSerial(String.valueOf(i));
+        }
         log.info("设置电价:" + JSON.toJSONString(request));
         Map<String, Object> map = checkChargeFeeParams(request);
         if (null != map) {
@@ -374,13 +396,11 @@ public class FunctionController {
         //已经判断过pileNos是否为空
         //获取连接channel 获取不到无法推送
         Channel channel = ChannelMapByEntity.getChannel(request.getTradeTypeCode(), request.getPileNo());
+        map = new HashedMap();
         if (null == channel) {
             map.put("status", "0");
             map.put("msg", "充电桩链接不可用");
             log.info("桩号{}在设置电价地址时不可用", request.getPileNo());
-        } else {
-            map.put("status", "1");
-            map.put("msg", "充电桩链接可用");
         }
 
         Type3SetChargeFeePushRequest pushRequest = new Type3SetChargeFeePushRequest();

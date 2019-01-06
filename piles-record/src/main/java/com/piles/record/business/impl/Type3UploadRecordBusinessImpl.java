@@ -46,27 +46,29 @@ public class Type3UploadRecordBusinessImpl implements IBusiness {
         //添加serial
         //调用底层接口
         boolean flag = uploadRecordService.uploadRecord(uploadRecord);
-        return buildReponse(msg, flag);
+        if (flag) {
+            return buildReponse(msg, flag);
+        } else {
+            return null;
+        }
     }
 
     //封装返回报文
     private byte[] buildReponse(byte[] msg, boolean result) {
 
-        byte[] head = new byte[]{(byte) 0xAA, (byte) 0xF5};
-        byte[] length = BytesUtil.intToBytesLittle(20, 1);
-        byte[] contrl = BytesUtil.copyBytes(msg, 2, 4);
+        byte[] head = BytesUtil.copyBytes(msg, 0, 6);
+        byte[] cmd = BytesUtil.intToBytesLittle(201);
+//        byte[] type = BytesUtil.intToBytesLittle(1, 1);
+        byte[] dataTemp = Bytes.concat(new byte[]{0x00, 0x00, 0x00, 0x00}, BytesUtil.copyBytes(msg, 45, 1),
+                BytesUtil.copyBytes(msg, 46, 32), BytesUtil.copyBytes(msg, 120, 4), new byte[]{0x00,
+                        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00});
 
-        byte[] type = BytesUtil.intToBytesLittle(XunDaoTypeCode.SEND_DATA_CODE.getCode(), 1);
-        byte[] beiyong = new byte[]{0x00};
-        byte[] reason = new byte[]{0x03, 0x00};
-        byte[] recordType = BytesUtil.intToBytesLittle(this.recordType, 1);
-        byte[] data = BytesUtil.copyBytes(msg, 13, 8);
-        byte[] resultByte = result == true ? new byte[]{0x00} : BytesUtil.intToBytesLittle(3, 1);
-        data = Bytes.concat(data, resultByte);
-        byte[] crc = CRC16Util.getXunDaoCRC(data);
-
-        return Bytes.concat(head, length, contrl, type, beiyong, reason, crc, recordType, data);
-
+        byte[] crc = new byte[]{CRC16Util.getType3CRC(Bytes.concat(cmd, dataTemp))};
+        int length = head.length + cmd.length + dataTemp.length + crc.length;
+        byte[] lengths = BytesUtil.intToBytesLittle(length);
+        head[2] = lengths[0];
+        head[3] = lengths[1];
+        return Bytes.concat(head, cmd, dataTemp, crc);
 
     }
 

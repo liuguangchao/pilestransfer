@@ -59,7 +59,7 @@ public class Type3UploadRecordRequest implements Serializable {
         Type3UploadRecordRequest request = new Type3UploadRecordRequest();
         int cursor = 0;
         int j = 0;
-        while (msg[j] != 0x00 && j != 32) {
+        while (msg[j] != 0x00 && j < 32) {
             j++;
         }
         request.setPileNo(BytesUtil.ascii2Str(BytesUtil.copyBytes(msg, cursor, j)));
@@ -69,7 +69,7 @@ public class Type3UploadRecordRequest implements Serializable {
         request.setGunNo(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 1)));
         cursor += 1;
         j = 0;
-        while (msg[cursor + j] != 0x00 && j != 32) {
+        while (msg[cursor + j] != 0x00 && j < 32) {
             j++;
         }
         request.setCardNo(Long.valueOf(BytesUtil.ascii2Str(BytesUtil.copyBytes(msg, cursor, j))));
@@ -93,7 +93,7 @@ public class Type3UploadRecordRequest implements Serializable {
         cursor += 16;
         request.setInnerNo(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 4)));
         cursor += 22;
-        while (msg[cursor + j] != 0x00 && j != 17) {
+        while (msg[cursor + j] != 0x00 && j < 17) {
             j++;
         }
         request.setVin(BytesUtil.ascii2Str(BytesUtil.copyBytes(msg, cursor, j)));

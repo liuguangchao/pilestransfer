@@ -32,20 +32,6 @@ public class Type3SetChargeFeePushRequest extends BasePushRequest implements Ser
     private String serial;
     private List<FeeInfo> feeInfoList;
 
-    @Data
-    class FeeInfo implements Comparable<FeeInfo> {
-        private int index;//第几个
-        private int startHour;//开始小时
-        private int endHour;//结束小时
-        private int startMin;//开始分钟
-        private int endMin;//结束分钟
-        private BigDecimal fee;//电价
-
-        @Override
-        public int compareTo(FeeInfo o) {
-            return this.index - o.index;
-        }
-    }
 
     /**
      * 封装报文体

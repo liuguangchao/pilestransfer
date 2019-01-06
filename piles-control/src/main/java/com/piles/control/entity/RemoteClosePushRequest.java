@@ -75,8 +75,8 @@ public class RemoteClosePushRequest extends BasePushRequest implements Serializa
      */
     public static byte[] packBytesType3(RemoteClosePushRequest request) {
 
-        byte[] data = Bytes.concat(new byte[]{0x00, 0x00, 0x00, 0x00}, BytesUtil.intToBytesLittle(request.getGunNo() + 1, 1), BytesUtil.intToBytesLittle(2, 4), new byte[]{0x01},
-                BytesUtil.intToBytesLittle(4, 1), BytesUtil.intToBytesLittle(4, 2), new byte[]{0x55, 0x55, 0x55, 0x55}
+        byte[] data = Bytes.concat(new byte[]{0x00, 0x00, 0x00, 0x00}, BytesUtil.intToBytesLittle(request.getGunNo(), 1), BytesUtil.intToBytesLittle(2, 4), new byte[]{0x01},
+                BytesUtil.intToBytesLittle(4, 2), new byte[]{0x55, 0x00, 0x00, 0x00}
         );
         byte[] serial = BytesUtil.intToBytesLittle(Integer.parseInt(request.getSerial()), 1);
 

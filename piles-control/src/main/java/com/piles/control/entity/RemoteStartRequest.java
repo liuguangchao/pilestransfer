@@ -49,7 +49,7 @@ public class RemoteStartRequest extends BasePushResponse implements Serializable
             i++;
         }
         request.setOrderNo(Long.valueOf(BytesUtil.ascii2Str(BytesUtil.copyBytes(serials, 0, i))));
-        request.setResult(BytesUtil.bytesToInt(BytesUtil.copyBytes(msg, 45, 4), 1));
+        request.setResult(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, 45, 4)));
         return request;
     }
 

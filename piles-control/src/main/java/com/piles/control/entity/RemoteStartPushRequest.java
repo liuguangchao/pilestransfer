@@ -168,7 +168,7 @@ public class RemoteStartPushRequest extends BasePushRequest implements Serializa
         byte[] orderNo = BytesUtil.rightPadBytes(String.valueOf(request.getOrderNo()).getBytes(), 32, (byte) 0x00);
         byte[] data = Bytes.concat(new byte[]{0x00, 0x00, 0x00, 0x00}, BytesUtil.intToBytesLittle(request.getGunNo(), 1), new byte[]{0x00, 0x00, 0x00, 0x00},
                 BytesUtil.intToBytesLittle(Integer.parseInt(request.getChargeStopCode()), 4),
-                BytesUtil.intToBytesLittle(model, 1), BytesUtil.intToBytesLittle(dataint, 4), new byte[]{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
+                BytesUtil.intToBytesLittle(model, 4), BytesUtil.intToBytesLittle(dataint, 4), new byte[]{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
                 orderNo, new byte[]{0x01, 0x00, 0x00, 0x00, 0x00}, orderNo
         );
         byte[] serial = BytesUtil.intToBytesLittle(Integer.parseInt(request.getSerial()), 1);

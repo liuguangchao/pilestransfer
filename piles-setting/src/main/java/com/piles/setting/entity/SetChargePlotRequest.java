@@ -24,7 +24,7 @@ public class SetChargePlotRequest extends BasePushResponse implements Serializab
      */
     public static SetChargePlotRequest packEntity(byte[] msg) {
         SetChargePlotRequest request = new SetChargePlotRequest();
-        request.setResult(Integer.parseInt(BytesUtil.binary(BytesUtil.copyBytes(msg, 8, 1), 10)));
+        request.setResult(BytesUtil.bytesToInt(BytesUtil.copyBytes(msg, 8, 1), 1));
         return request;
     }
 }

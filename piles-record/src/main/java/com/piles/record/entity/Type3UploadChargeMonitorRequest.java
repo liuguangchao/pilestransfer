@@ -67,7 +67,7 @@ public class Type3UploadChargeMonitorRequest implements Serializable {
         Type3UploadChargeMonitorRequest request = new Type3UploadChargeMonitorRequest();
         int cursor = 0;
         int j = 0;
-        while (msg[j] != 0x00) {
+        while (msg[j] != 0x00 && j < 32) {
             j++;
         }
         request.setPileNo(BytesUtil.ascii2Str(BytesUtil.copyBytes(msg, cursor, j)));
@@ -110,8 +110,8 @@ public class Type3UploadChargeMonitorRequest implements Serializable {
         cursor += 2;
         request.setCn(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2))).divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP));
         cursor += 2;
-        request.setNeedTime(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 4)));
-        cursor += 4;
+        request.setNeedTime(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2)));
+        cursor += 2;
         request.setChargeTime(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 4)));
         cursor += 4;
         request.setChargeQuantity(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 4))).divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP));
@@ -124,7 +124,7 @@ public class Type3UploadChargeMonitorRequest implements Serializable {
         cursor += 5;
 
         j = 0;
-        while (msg[cursor + j] != 0x00 || 32 == j) {
+        while (msg[cursor + j] != 0x00 && j < 32) {
             j++;
         }
         request.setCardNo(BytesUtil.ascii2Str(BytesUtil.copyBytes(msg, cursor, j)));
