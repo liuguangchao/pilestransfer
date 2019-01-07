@@ -29,14 +29,14 @@ public class XunDaoLockSyncBusinessImpl implements IBusiness {
         int day = dateTime.getDayOfMonth();
         int month = dateTime.getMonthOfYear();
         int year = dateTime.getYear() - 2000;
-        byte[] data = Bytes.concat(BytesUtil.intToBytesLittle(ms), BytesUtil.intToBytesLittle(min, 1), BytesUtil.intToBytesLittle(hour, 1),
-                BytesUtil.intToBytesLittle(day, 1), BytesUtil.intToBytesLittle(month, 1), BytesUtil.intToBytesLittle(year, 1));
+        byte[] data = Bytes.concat(BytesUtil.intToBytes(ms), BytesUtil.intToBytes(min, 1), BytesUtil.intToBytes(hour, 1),
+                BytesUtil.intToBytes(day, 1), BytesUtil.intToBytes(month, 1), BytesUtil.intToBytes(year, 1));
 
         byte[] head = new byte[]{0x68};
-        byte[] length = BytesUtil.intToBytesLittle(20, 1);
+        byte[] length = BytesUtil.intToBytes(20, 1);
         byte[] contrl = BytesUtil.copyBytes(msg, 2, 4);
 
-        byte[] type = BytesUtil.intToBytesLittle(XunDaoTypeCode.LOCK_SYNC_CODE.getCode(),1);
+        byte[] type = BytesUtil.intToBytes(XunDaoTypeCode.LOCK_SYNC_CODE.getCode(),1);
         byte[] beiyong = new byte[]{0x00};
         byte[] reason = BytesUtil.copyBytes(msg, 8, 2);
         byte[] crc = CRC16Util.getXunDaoCRC(data);
