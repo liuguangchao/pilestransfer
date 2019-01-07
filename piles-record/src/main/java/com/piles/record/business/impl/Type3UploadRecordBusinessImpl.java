@@ -79,7 +79,7 @@ public class Type3UploadRecordBusinessImpl implements IBusiness {
         uploadRecord.setEndReason(uploadRecordRequest.getStopChargeReason());
         uploadRecord.setTotalAmmeterDegree(uploadRecordRequest.getTotalAmmeterDegree());
         uploadRecord.setSerial(Integer.parseInt(uploadRecordRequest.getSerial()));
-        uploadRecord.setPileType(0);
+        uploadRecord.setPileType(6);
         uploadRecord.setGunNo(gunNo);
         return uploadRecord;
     }
