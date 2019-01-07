@@ -110,7 +110,7 @@ public class Type3UploadChargeMonitorRequest implements Serializable {
         cursor += 2;
         request.setCn(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2))).divide(new BigDecimal(10), 2, BigDecimal.ROUND_HALF_UP));
         cursor += 2;
-        request.setNeedTime(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2)));
+        request.setNeedTime(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2))*60);
         cursor += 2;
         request.setChargeTime(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 4)));
         cursor += 4;
