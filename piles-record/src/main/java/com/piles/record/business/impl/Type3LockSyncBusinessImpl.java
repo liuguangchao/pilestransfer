@@ -20,7 +20,7 @@ public class Type3LockSyncBusinessImpl implements IBusiness {
 
     @Override
     public byte[] process(byte[] msg, Channel incoming) {
-        log.info("接收到循道时钟同步请求报文");
+        log.info("接收到type3时钟同步请求报文");
         //依照报文体规则解析报文
         DateTime dateTime = new DateTime();
         int ms = dateTime.getMillisOfSecond();

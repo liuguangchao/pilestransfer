@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * 循道 下发修改ip地址 后台--》充电桩
+ * type3 下发电价 后台--》充电桩
  */
 @Data
 public class Type3SetChargeFeePushRequest extends BasePushRequest implements Serializable {

@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * 循道上传充电过程监测数据接口请求实体
+ * type3上传充电过程监测数据接口请求实体
  */
 @Data
 public class Type3UploadChargeMonitorRequest implements Serializable {
