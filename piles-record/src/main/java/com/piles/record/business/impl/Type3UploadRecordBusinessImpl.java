@@ -37,12 +37,11 @@ public class Type3UploadRecordBusinessImpl implements IBusiness {
     @Override
     public byte[] process(byte[] msg, Channel incoming) {
         log.info("接收到【type3】充电桩上传充电记录报文");
-        int gunNo = MsgHelper.getType3GunNo(msg);
         //依照报文体规则解析报文
         byte[] dataBytes = BytesUtil.copyBytes(msg, 12, (msg.length - 12));
         Type3UploadRecordRequest uploadRecordRequest = Type3UploadRecordRequest.packEntity(dataBytes);
         log.info("接收到【type3】充电桩上传充电记录报文:{}", uploadRecordRequest.toString());
-        UploadRecord uploadRecord = buildServiceEntity(uploadRecordRequest, gunNo);
+        UploadRecord uploadRecord = buildServiceEntity(uploadRecordRequest, uploadRecordRequest.getGunNo());
         //添加serial
         //调用底层接口
         boolean flag = uploadRecordService.uploadRecord(uploadRecord);

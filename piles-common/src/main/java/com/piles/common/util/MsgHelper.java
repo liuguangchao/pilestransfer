@@ -16,16 +16,7 @@ public class MsgHelper {
         return BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, 7, 1));
     }
 
-    /**
-     * 获取报文中的枪号
-     *
-     * @param msg 原始报文
-     * @return 枪号
-     */
-    public static int getType3GunNo(byte[] msg) {
 
-        return BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, 45, 1));
-    }
 
     /**
      * 获取报文中的桩类型
