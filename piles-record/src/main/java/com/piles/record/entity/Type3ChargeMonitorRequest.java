@@ -14,7 +14,7 @@ import java.math.BigDecimal;
  */
 @Data
 @ToString
-public class XunDaoChargeMonitorRequest extends BasePushResponse implements Serializable {
+public class Type3ChargeMonitorRequest extends XunDaoChargeMonitorRequest implements Serializable {
     //桩类型
     private int pileType;
     //枪号
@@ -55,7 +55,14 @@ public class XunDaoChargeMonitorRequest extends BasePushResponse implements Seri
     private String serial;
     //订单号 ascii 32位小端
     private String orderNo;
-
+    private int soc;
+    private int needTime;//分钟
+    //充电输出电压(直 流最大输出电压)	BIN	2	精确到小数点后一位
+    private BigDecimal dcAllowVoltage;
+    //充电输出电流(直 流最大输出电流)	BIN	2	单位：A，精确到小数点后二位
+    private BigDecimal dcAllowElectricity;
+    //剩余充电时间 BIN 2 字节 分
+    private int unDochargeDuration;
 
 
 
@@ -65,8 +72,8 @@ public class XunDaoChargeMonitorRequest extends BasePushResponse implements Seri
      * @param msg
      * @return
      */
-    public static XunDaoChargeMonitorRequest packEntity(byte[] msg) {
-        XunDaoChargeMonitorRequest request = new XunDaoChargeMonitorRequest();
+    public static Type3ChargeMonitorRequest packEntity(byte[] msg) {
+        Type3ChargeMonitorRequest request = new Type3ChargeMonitorRequest();
 
         request.setGunNo(MsgHelper.getGunNo(msg));
         request.setPileType(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, 8, 2)));
@@ -126,8 +133,8 @@ public class XunDaoChargeMonitorRequest extends BasePushResponse implements Seri
      * @param msg
      * @return
      */
-    public static XunDaoChargeMonitorRequest packEntityType3(Type3UploadChargeMonitorRequest msg) {
-        XunDaoChargeMonitorRequest request = new XunDaoChargeMonitorRequest();
+    public static Type3ChargeMonitorRequest packEntityType3(Type3UploadChargeMonitorRequest msg) {
+        Type3ChargeMonitorRequest request = new Type3ChargeMonitorRequest();
         request.setWorkStatus(msg.getWorkStatus() + "");
         request.setGunNo(msg.getGunNo());
         request.setPileNo(msg.getPileNo());
@@ -137,12 +144,17 @@ public class XunDaoChargeMonitorRequest extends BasePushResponse implements Seri
         request.setHighestAllowElectricity(msg.getHighestAllowElectricity());
         request.setHighestAllowVoltage(msg.getHighestAllowVoltage());
         request.setOrderNo(msg.getCardNo());
+        request.setSoc(msg.getSoc());
+        request.setNeedTime(msg.getNeedTime());
         request.setPileType(msg.getPileType());
+        request.setDcAllowElectricity(msg.getHighestAllowElectricity());
+        request.setDcAllowVoltage(msg.getHighestAllowVoltage());
+        request.setUnDochargeDuration(msg.getNeedTime());
 
         return request;
     }
 
-    public static byte[] packBytes(XunDaoChargeMonitorRequest request) {
+    public static byte[] packBytes(Type3ChargeMonitorRequest request) {
         byte[] responseBytes = new byte[]{};
         return responseBytes;
     }
@@ -157,6 +169,6 @@ public class XunDaoChargeMonitorRequest extends BasePushResponse implements Seri
         byte[] dataBytes = BytesUtil.copyBytes(bytes, 13, (bytes.length - 13));
 
         //依照报文体规则解析报文
-        XunDaoChargeMonitorRequest uploadChargeMonitorRequest = XunDaoChargeMonitorRequest.packEntity(dataBytes);
+        Type3ChargeMonitorRequest uploadChargeMonitorRequest = Type3ChargeMonitorRequest.packEntity(dataBytes);
     }
 }
