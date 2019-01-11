@@ -35,11 +35,19 @@ public class ChannelMapByEntity {
      * @exception
      */
     public static void addChannel(ChannelEntity channelEntity, Channel channel) {
-        channelMap2.put(channelEntity.getTradeType().getCode()+"_"+channelEntity.getPileNo(), channel);
+        String key=channelEntity.getTradeType().getCode()+"_"+channelEntity.getPileNo();
+        if (!channelMap2.containsKey(key  )||
+                channel.equals( channelMap2.containsKey(key  ) ) ) {
+            channelMap2.put( key, channel );
+        }
     }
 
     public static void addChannel(Channel channel,ChannelEntity channelEntity) {
-        channelMap3.put(channel, channelEntity.getTradeType().getCode()+"_"+channelEntity.getPileNo());
+        String key1=channelEntity.getTradeType().getCode()+"_"+channelEntity.getPileNo();
+        if (!channelMap3.containsKey(channel  )||
+                key1.equalsIgnoreCase( channelMap3.get( channel ) ) ) {
+            channelMap3.put( channel, key1);
+        }
     }
 
 

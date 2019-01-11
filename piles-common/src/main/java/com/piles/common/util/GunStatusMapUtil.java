@@ -4,13 +4,14 @@ import com.piles.common.entity.type.TradeType;
 import org.apache.commons.collections.map.HashedMap;
 
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author lgc48027
  * @version Id: GunStatusMapUtil, v 0.1 2018/1/31 18:45 lgc48027 Exp $
  */
 public class GunStatusMapUtil {
-    private static Map<String,Integer> map=new HashedMap(  );
+    private static Map<String,Integer> map=new ConcurrentHashMap<>(  );
 
     public static void put(String pileNo, TradeType tradeType,int gunNo,int status){
         String key=pileNo+"_"+tradeType.getCode();
@@ -21,7 +22,7 @@ public class GunStatusMapUtil {
         if (map.containsKey( key )){
             Integer val=map.get( key );
             if (status!=val){
-                map.replace( key,val,status );
+                map.put( key,status );
             }
         }else {
             map.put( key,status );
@@ -37,7 +38,7 @@ public class GunStatusMapUtil {
         }
         return map.get( key );
     }
-    private static Map<String,String> map2=new HashedMap(  );
+    private static Map<String,String> map2=new ConcurrentHashMap<>(  );
 
     public static void putDC(String pileNo, TradeType tradeType,int gunNo,String status){
         String key=pileNo+"_"+tradeType.getCode();
@@ -48,7 +49,7 @@ public class GunStatusMapUtil {
         if (map2.containsKey( key )){
             String val=map2.get( key );
             if (status!=val){
-                map2.replace( key,val,status );
+                map2.put( key,status );
             }
         }else {
             map2.put( key,status );
